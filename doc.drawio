@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-07-22T12:45:32.728Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="78T187P5wdBmqHlEjXHl" version="24.7.1" type="github">
+<mxfile host="app.diagrams.net" modified="2024-07-22T12:54:20.180Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="Sab-NtdnKH2lnNAcnAI2" version="24.7.1" type="github">
   <diagram name="overview" id="SPu-IzBGrGhdDAje9yr5">
-    <mxGraphModel dx="1015" dy="478" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1762" dy="829" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -62,7 +62,7 @@
           <mxGeometry x="1210" y="20" width="100" height="100" as="geometry" />
         </mxCell>
         <mxCell id="LneJchFOcHRrpAtctG9d-11" value="OpenIdClient" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="1250" y="260" width="180" height="80" as="geometry" />
+          <mxGeometry x="1290" y="280" width="180" height="80" as="geometry" />
         </mxCell>
         <mxCell id="LneJchFOcHRrpAtctG9d-12" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="LneJchFOcHRrpAtctG9d-10" target="LneJchFOcHRrpAtctG9d-11">
           <mxGeometry relative="1" as="geometry">
@@ -74,7 +74,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="LneJchFOcHRrpAtctG9d-14" value="Cache" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="1420" y="414" width="180" height="80" as="geometry" />
+          <mxGeometry x="1700" y="320" width="180" height="80" as="geometry" />
         </mxCell>
         <mxCell id="LneJchFOcHRrpAtctG9d-16" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="LneJchFOcHRrpAtctG9d-11" target="LneJchFOcHRrpAtctG9d-14">
           <mxGeometry relative="1" as="geometry">
@@ -82,7 +82,7 @@
             <mxPoint x="1569" y="360" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="LneJchFOcHRrpAtctG9d-18" value="Retrieve JWK Information" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="LneJchFOcHRrpAtctG9d-16">
+        <mxCell id="LneJchFOcHRrpAtctG9d-18" value="Get JWK Set" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="LneJchFOcHRrpAtctG9d-16">
           <mxGeometry x="0.0515" y="3" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
