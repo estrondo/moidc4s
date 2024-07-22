@@ -1,10 +1,10 @@
-<mxfile host="app.diagrams.net" modified="2024-07-22T10:57:03.187Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="SP31rGh0TEcN3xZ4vO35" version="24.7.1" type="github">
+<mxfile host="app.diagrams.net" modified="2024-07-22T12:04:22.030Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="8U4_KEukffPren_j1_1i" version="24.7.1" type="github">
   <diagram name="overview" id="SPu-IzBGrGhdDAje9yr5">
     <mxGraphModel dx="1015" dy="478" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <object placeholders="1" c4Name="OpenIdClient" c4Type="class" c4Technology="core" c4Description="" label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;%c4Description%&lt;/font&gt;&lt;/div&gt;" id="CInMSoNEQ62lz7IG-tAm-11">
+        <object placeholders="1" c4Name="OpenIdProvider" c4Type="class" c4Technology="core" c4Description="" label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;%c4Description%&lt;/font&gt;&lt;/div&gt;" id="CInMSoNEQ62lz7IG-tAm-11">
           <mxCell style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#63BEF2;fontColor=#ffffff;align=center;arcSize=6;strokeColor=#2086C9;metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];" vertex="1" parent="1">
             <mxGeometry x="50" y="430" width="240" height="120" as="geometry" />
           </mxCell>
@@ -60,6 +60,32 @@
         </object>
         <mxCell id="LneJchFOcHRrpAtctG9d-10" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="1210" y="20" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="LneJchFOcHRrpAtctG9d-11" value="OpenIdClient" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="260" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="LneJchFOcHRrpAtctG9d-12" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="LneJchFOcHRrpAtctG9d-10" target="LneJchFOcHRrpAtctG9d-11">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1430" y="220" as="sourcePoint" />
+            <mxPoint x="1530" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="LneJchFOcHRrpAtctG9d-13" value="validateToken" style="edgeLabel;resizable=0;html=1;;align=center;verticalAlign=middle;" connectable="0" vertex="1" parent="LneJchFOcHRrpAtctG9d-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LneJchFOcHRrpAtctG9d-14" value="Cache" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="414" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="LneJchFOcHRrpAtctG9d-16" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="LneJchFOcHRrpAtctG9d-11" target="LneJchFOcHRrpAtctG9d-14">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1520" y="220" as="sourcePoint" />
+            <mxPoint x="1569" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="LneJchFOcHRrpAtctG9d-18" value="Retrieve JWK Information" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="LneJchFOcHRrpAtctG9d-16">
+          <mxGeometry x="0.0515" y="3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
