@@ -6,14 +6,14 @@ import one.estrondo.oidc.Lookup
 import one.estrondo.oidc.MockedContext
 import one.estrondo.oidc.RefMaker
 import one.estrondo.oidc.TestUnit
+import one.estrondo.oidc.TestUnitOps
 import one.estrondo.oidc.syntax._
 import org.scalatest.EitherValues
 import org.scalatest.matchers.should.Matchers
 
-class CacheSpecification[F[_]: Context: RefMaker] extends EitherValues {
+class CacheSpecification[F[_]: Context: RefMaker] extends EitherValues with TestUnitOps {
 
-  def u01: TestUnit[F] = TestUnit(
-    name = "Cache: it should lookup just once when it is not defined.",
+  def u01: TestUnit[F] = testUnit("It should lookup just once when it is not defined.")(
     unit = new UnitContext[String] {
 
       def run = {
@@ -33,29 +33,25 @@ class CacheSpecification[F[_]: Context: RefMaker] extends EitherValues {
     }.verified,
   )
 
-  def u02 = TestUnit(
-    name = "Cache: it should  report any error in looking up.",
-    unit = new UnitContext[String] {
-      def run = {
-        (lookup.apply _)
-          .expects()
-          .returning(Context[F].failed(new IllegalStateException("@@@")))
-          .once()
+  def u02 = testUnit("It should  report any error in looking up.")(new UnitContext[String] {
+    def run = {
+      (lookup.apply _)
+        .expects()
+        .returning(Context[F].failed(new IllegalStateException("@@@")))
+        .once()
 
-        for {
-          cache <- cacheF
-          v     <- cache.get
-                     .map(Right(_))
-                     .recover(e => Context[F].pure(Left(e): Either[Throwable, String]))
-        } yield {
-          v.left.value shouldBe an[IllegalStateException]
-        }
+      for {
+        cache <- cacheF
+        v     <- cache.get
+                   .map(Right(_))
+                   .recover(e => Context[F].pure(Left(e): Either[Throwable, String]))
+      } yield {
+        v.left.value shouldBe an[IllegalStateException]
       }
-    }.verified,
-  )
+    }
+  }.verified)
 
-  def u03 = TestUnit(
-    name = "Cache: it should invalidate when required.",
+  def u03 = testUnit("It should invalidate when required.")(
     unit = new UnitContext[String] {
       def run = {
         (lookup.apply _)

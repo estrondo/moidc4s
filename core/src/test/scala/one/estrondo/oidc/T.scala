@@ -11,9 +11,15 @@ trait T[A] {
 
 object T {
 
-  case class Pure[A](a: A) extends T[A] {
+  class Pure[A](a: () => A) extends T[A] {
     override def run[O](out: A => O): Try[O] = {
-      Success(out(a))
+      Success(out(a()))
+    }
+  }
+
+  object Pure {
+    def apply[A](a: => A): Pure[A] = {
+      new Pure(() => a)
     }
   }
 

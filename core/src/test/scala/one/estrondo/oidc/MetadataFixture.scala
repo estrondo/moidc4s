@@ -5,6 +5,6 @@ import scala.util.Random
 object MetadataFixture {
 
   def createRandom(): Metadata = Metadata(
-    jwksUri = Some(Random.nextString(32)),
+    jwks_uri = Some(Random.nextString(32)),
   )
 }

@@ -1,72 +1,68 @@
 package one.estrondo.oidc
 
+import one.estrondo.oidc.syntax._
 import scala.collection.immutable.HashMap
 import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
-import syntax._
 
-class LookupKeySet[F[_]: Context: Transporter: Json](cache: Cache[F, Metadata]) extends Lookup[F, KeySet] {
+object LookupKeySet {
 
-  override def apply(): F[KeySet] = {
-    for {
-      metadata <- cache.get
-      jwkSet   <- loadJwkSet(metadata)
-    } yield jwkSet
-  }
+  class External[F[_]: Context](provider: Provider.ExternalKeySet[F]) extends Lookup[F, KeySet] {
 
-  private def loadJwkSet(metadata: Metadata): F[KeySet] = {
-
-    def parseResponse(url: String)(response: Transporter.Response): F[KeySet] = response match {
-      case Transporter.Ok(body)       =>
-        Json[F]
-          .jwkSet(body)
-          .mapError(new OidcException.NoJwkSet("Unable to parse the JWK.", _))
-          .flatMap(parseJwkSet)
-      case failed: Transporter.Failed =>
-        Context[F].failed(
-          new OidcException.FailedRequest("Unable to request the jwksSet.", url = url, response = failed),
-        )
+    override def apply(): F[KeySet] = {
+      for {
+        keySet <- provider.keySet
+                    .mapError(new OidcException.Unexpected("Unable to acquire the KeySet.", _))
+      } yield keySet
     }
 
-    metadata.jwksUri match {
-      case Some(uri) =>
-        Transporter[F]
-          .get(uri)
-          .mapError(new OidcException.Unexpected(s"Unable to perform the request: $uri.", _))
-          .flatMap(parseResponse(uri))
-      case None      =>
-        Context[F].failed(new OidcException.NoJwkSet())
-    }
+    override def invalidate(): F[Unit] = Context[F].done
   }
 
-  private def parseJwkSet(jwkSet: JwkSet): F[KeySet] = {
-    jwkSet.keys.tryFoldLeft(Seq.empty[KeyDescription]) { (seq, jwk) =>
-      for (key <- parse(jwk)) yield {
-        seq :+ key
-      }
-    } match {
-      case Success(keys)  =>
+  class FromJwkSet[F[_]: Context](underlying: Lookup[F, JwkSet]) extends Lookup[F, KeySet] {
+
+    override def apply(): F[KeySet] = {
+      underlying()
+        .mapError(new OidcException.Unexpected("Unable to acquire the JwkSet.", _))
+        .flatMap { jwkSet =>
+          parse(jwkSet) match {
+            case Success(keySet) => Context[F].pure(keySet)
+            case Failure(cause)  => Context[F].failed(cause)
+          }
+        }
+    }
+
+    private def parse(jwkSet: JwkSet): Try[KeySet] = {
+      for {
+        descriptions <- jwkSet.keys.tryFoldLeft(Seq.empty[KeyDescription]) { (seq, key) =>
+                          for (description <- parse(key)) yield {
+                            seq :+ description
+                          }
+                        }
+      } yield {
         var byKid      = HashMap.empty[String, KeyDescription]
         var withoutKid = Seq.empty[KeyDescription]
 
-        for (key <- keys) key.kid match {
-          case Some(kid) => byKid += (kid -> key)
-          case None      => withoutKid :+= key
+        for (description <- descriptions) description.kid match {
+          case Some(kid) => byKid += (kid -> description)
+          case None      => withoutKid :+= description
         }
 
-        Context[F].pure(KeySet(byKid, withoutKid))
-      case Failure(cause) =>
-        Context[F].failed(cause)
+        KeySet(byKid, withoutKid)
+      }
     }
-  }
 
-  private def parse(jwk: Jwk): Try[KeyDescription] = {
-    jwk.kty match {
-      case Some(kty) => Jwa(kty, jwk)
-      case None      => Failure(new OidcException.InvalidJwk("The parameter 'kty' is required."))
+    private def parse(jwk: Jwk): Try[KeyDescription] = {
+      jwk.kty match {
+        case Some(kty) if kty.nonEmpty =>
+          Jwa(kty, jwk)
+        case _                         =>
+          Failure(new OidcException.InvalidJwk("It is required to have a non-empty 'kty'."))
+      }
     }
-  }
 
-  override def invalidate(): F[Unit] = ???
+    override def invalidate(): F[Unit] =
+      underlying.invalidate()
+  }
 }

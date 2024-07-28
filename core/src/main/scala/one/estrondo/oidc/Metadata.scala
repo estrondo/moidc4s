@@ -1,5 +1,5 @@
 package one.estrondo.oidc
 
 case class Metadata(
-    jwksUri: Option[String],
+    jwks_uri: Option[String],
 )

@@ -5,11 +5,11 @@ import org.scalamock.matchers.Matchers
 import org.scalatest.Assertion
 import syntax._
 
-abstract class MockedContext[F[_]: Context] extends MockFactoryBase with Matchers {
+trait MockedContext[F[_]] extends MockFactoryBase with Matchers with Specs[F] {
 
   override type ExpectationException = Exception
 
-  def verified: F[Assertion] = {
+  def verified(implicit c: Context[F]): F[Assertion] = {
     for (assertion <- run) yield {
       withExpectations(())
       assertion
