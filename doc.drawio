@@ -98,7 +98,7 @@
           <mxGeometry x="1190" y="170" width="150" height="60" as="geometry" />
         </mxCell>
         <mxCell id="1biydpapWqW5dgG5dPzN-5" value="KeySetLookup.FromJwkSet" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1639.29" y="230" width="180.71" height="60" as="geometry" />
+          <mxGeometry x="1680" y="170" width="180.71" height="60" as="geometry" />
         </mxCell>
         <mxCell id="1biydpapWqW5dgG5dPzN-8" value="JwkSetSource.Remote" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1470.0000000000002" y="430" width="180.71" height="60" as="geometry" />
@@ -155,7 +155,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="1biydpapWqW5dgG5dPzN-28" value="&lt;div&gt;KeySetLookup.External&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1590.0000000000002" y="120" width="180.71" height="60" as="geometry" />
+          <mxGeometry x="1560.0000000000002" y="80" width="180.71" height="60" as="geometry" />
         </mxCell>
         <mxCell id="1biydpapWqW5dgG5dPzN-29" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" source="S1vDefmYk0TmTCa-z_n8-9" target="nWdLU21Ytbxsn5tAp6e1-4" edge="1">
           <mxGeometry relative="1" as="geometry">
