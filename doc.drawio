@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36" version="24.7.6">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0" version="24.7.6">
   <diagram name="overview" id="SPu-IzBGrGhdDAje9yr5">
-    <mxGraphModel dx="819" dy="1277" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1026" dy="1514" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -109,7 +109,7 @@
         <mxCell id="1biydpapWqW5dgG5dPzN-7" value="Can use" style="edgeLabel;resizable=0;html=1;;align=center;verticalAlign=middle;" parent="1biydpapWqW5dgG5dPzN-6" connectable="0" vertex="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="1biydpapWqW5dgG5dPzN-8" value="LookupJwkSet.Remote&lt;br&gt;Lookup[JwkKey]" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="1biydpapWqW5dgG5dPzN-8" value="JwkSetSource.Remote&lt;br&gt;Source[JwkSet]" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1660.0000000000002" y="414" width="180.71" height="60" as="geometry" />
         </mxCell>
         <mxCell id="1biydpapWqW5dgG5dPzN-9" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" source="1biydpapWqW5dgG5dPzN-5" target="1biydpapWqW5dgG5dPzN-8" edge="1">
@@ -134,9 +134,9 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="1biydpapWqW5dgG5dPzN-20" value="F[JwkSet]" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1879.29" y="40" width="180.71" height="60" as="geometry" />
+          <mxGeometry x="1790" y="-90" width="180.71" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="1biydpapWqW5dgG5dPzN-21" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" source="1biydpapWqW5dgG5dPzN-16" target="1biydpapWqW5dgG5dPzN-20" edge="1">
+        <mxCell id="1biydpapWqW5dgG5dPzN-21" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" source="1biydpapWqW5dgG5dPzN-40" target="1biydpapWqW5dgG5dPzN-20" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="1876" y="530" as="sourcePoint" />
             <mxPoint x="1904" y="670" as="targetPoint" />
@@ -212,7 +212,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="1biydpapWqW5dgG5dPzN-40" value="Provider.ExternalJwkSet" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
-          <mxGeometry x="2050" y="170" width="180.71" height="60" as="geometry" />
+          <mxGeometry x="1790" y="30" width="180.71" height="60" as="geometry" />
         </mxCell>
         <mxCell id="1biydpapWqW5dgG5dPzN-41" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" source="1biydpapWqW5dgG5dPzN-16" target="1biydpapWqW5dgG5dPzN-40" edge="1">
           <mxGeometry relative="1" as="geometry">
