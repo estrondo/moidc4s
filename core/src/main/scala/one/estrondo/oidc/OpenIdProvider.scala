@@ -4,21 +4,24 @@ import one.estrondo.oidc.syntax._
 
 trait OpenIdProvider[F[_]] {
 
-  def evaluate[J](token: String)(implicit jwt: Jwt[F, J]): F[J]
+  def evaluate[J](token: String)(implicit jwt: Jwt[F, J], ctx: Context[F]): F[J]
 }
 
 object OpenIdProvider {
 
-  def apply[F[_]: Context: RefMaker: Transporter: Json](provider: Provider): F[OpenIdProvider[F]] = {
-    ???
+  def apply[F[_]: Context: RefMaker](provider: Provider[F]): F[OpenIdProvider[F]] = {
+    for {
+      keySetCache <- Cache(KeySetLookup(provider))
+    } yield {
+      new Impl(keySetCache)
+    }
   }
 
-  private class Impl[F[_]: Context: RefMaker: Transporter: Json](keySetCache: Cache[F, KeySet])
-      extends OpenIdProvider[F] {
+  private class Impl[F[_]](keySetCache: Cache[F, KeySet]) extends OpenIdProvider[F] {
 
-    override def evaluate[J](token: String)(implicit jwt: Jwt[F, J]): F[J] = {
+    override def evaluate[J](token: String)(implicit jwt: Jwt[F, J], ctx: Context[F]): F[J] = {
       for {
-        jwkSetT <- keySetCache.get
+        keySet <- keySetCache.get
       } yield {
         ???
       }

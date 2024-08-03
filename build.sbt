@@ -20,8 +20,9 @@ inThisBuild(
 
 val crossScalacOptions = scalacOptions ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((3, _)) => List("-source:3.0-migration", "-Wunused:all", "-explain")
-    case _            => List("-Xlint:unused")
+    case Some((3, _))  => List("-source:3.0-migration", "-Wunused:all", "-explain")
+    case Some((2, 12)) => List("-Ywarn-unused")
+    case Some((2, 13)) => List("-Wunused")
   }
 }
 

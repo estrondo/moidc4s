@@ -1,11 +1,12 @@
 package one.estrondo.oidc
 
+import one.estrondo.oidc.syntax._
 import org.scalamock.MockFactoryBase
 import org.scalamock.matchers.Matchers
 import org.scalatest.Assertion
-import syntax._
+import org.scalatest.TryValues
 
-trait MockedContext[F[_]] extends MockFactoryBase with Matchers with Specs[F] {
+trait MockedContext[F[_]] extends MockFactoryBase with Matchers with TryValues with Specs[F] {
 
   override type ExpectationException = Exception
 
