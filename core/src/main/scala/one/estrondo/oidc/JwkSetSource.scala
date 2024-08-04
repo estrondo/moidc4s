@@ -3,7 +3,7 @@ import one.estrondo.oidc.syntax._
 
 object JwkSetSource {
 
-  abstract private class Remote[F[_]: Transporter: Json] extends Source[F, JwkSet] {
+  abstract private class Remote[F[_]: Transporter: JsonFramework] extends Source[F, JwkSet] {
 
     protected def extractFromJwkSetUrl(url: String)(implicit ctx: Context[F]): F[JwkSet] = {
       Transporter[F]
@@ -16,7 +16,7 @@ object JwkSetSource {
     ): F[JwkSet] = {
       response match {
         case Transporter.Ok(body) =>
-          Json[F]
+          JsonFramework[F]
             .jwkSet(body)
             .mapError(new OidcException.InvalidJwk("Unable to parse the JwkSet body.", _))
 
@@ -26,13 +26,13 @@ object JwkSetSource {
     }
   }
 
-  private class JwkSetUri[F[_]: Transporter: Json](url: String) extends Remote[F] {
+  private class JwkSetUri[F[_]: Transporter: JsonFramework](url: String) extends Remote[F] {
     override def apply()(implicit ctx: Context[F]): F[JwkSet] = {
       extractFromJwkSetUrl(url)
     }
   }
 
-  private class Discovery[F[_]: Transporter: Json](url: String) extends Remote[F] {
+  private class Discovery[F[_]: Transporter: JsonFramework](url: String) extends Remote[F] {
     override def apply()(implicit ctx: Context[F]): F[JwkSet] = {
       Transporter[F]
         .get(url)
@@ -45,7 +45,7 @@ object JwkSetSource {
     private def parseDiscoveryResponse(response: Transporter.Response)(implicit ctx: Context[F]): F[Metadata] = {
       response match {
         case Transporter.Ok(body)         =>
-          Json[F].metadata(body)
+          JsonFramework[F].metadata(body)
         case response: Transporter.Failed =>
           ctx.failed(new OidcException.FailedRequest("Invalid request.", url, response))
       }

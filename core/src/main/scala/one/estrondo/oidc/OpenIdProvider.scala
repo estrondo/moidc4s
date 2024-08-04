@@ -4,7 +4,7 @@ import one.estrondo.oidc.syntax._
 
 trait OpenIdProvider[F[_]] {
 
-  def evaluate[J](token: String)(implicit jwt: Jwt[F, J], ctx: Context[F]): F[J]
+  def evaluate[J](token: String)(implicit jwt: JwtFramework[F, J], ctx: Context[F]): F[J]
 }
 
 object OpenIdProvider {
@@ -19,7 +19,7 @@ object OpenIdProvider {
 
   private class Impl[F[_]](keySetCache: Cache[F, KeySet]) extends OpenIdProvider[F] {
 
-    override def evaluate[J](token: String)(implicit jwt: Jwt[F, J], ctx: Context[F]): F[J] = {
+    override def evaluate[J](token: String)(implicit jwt: JwtFramework[F, J], ctx: Context[F]): F[J] = {
       for {
         keySet <- keySetCache.get
       } yield {
