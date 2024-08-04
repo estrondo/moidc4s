@@ -18,3 +18,7 @@ case class Jwk(
     k: Option[String] = None,
     use: Option[String] = None,
 )
+
+case class JwkSet(
+    keys: Seq[Jwk],
+)

@@ -4,11 +4,9 @@ import org.scalatest.Assertion
 
 trait TestUnitOps {
 
-  protected def testUnit[F[_]](name: String)(unit: F[Assertion]): TestUnit[F] = {
-    TestUnit(
-      name = s"${getClass.getSimpleName.replaceAll("Specification$", "")}: $name",
-      unit = unit,
-    )
+  protected def mockedTestUnit[F[_]: Context](name: String)(block: MockedContext[F]): TestUnit[F] = {
+    val fullName = s"${getClass.getSimpleName.replaceAll("Specification$", "")}: $name"
+    TestUnit[F](fullName, block.verified)
   }
 }
 

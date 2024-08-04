@@ -14,4 +14,6 @@ abstract class ZioOidcSpec extends ZIOSpecDefault {
         assertTrue(assertion.isInstanceOf[Succeeded.type])
       }
     }
+
+
 }
