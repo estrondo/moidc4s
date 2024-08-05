@@ -5,7 +5,7 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
-object KeySetLookup {
+private[oidc] object KeySetLookup {
 
   private[oidc] class External[F[_]](source: Source[F, KeySet]) extends Lookup[F, KeySet] {
 

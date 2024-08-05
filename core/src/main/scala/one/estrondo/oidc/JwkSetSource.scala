@@ -1,7 +1,7 @@
 package one.estrondo.oidc
 import one.estrondo.oidc.syntax._
 
-object JwkSetSource {
+private[oidc] object JwkSetSource {
 
   abstract private class Remote[F[_]: Transporter: JsonFramework] extends Source[F, JwkSet] {
 

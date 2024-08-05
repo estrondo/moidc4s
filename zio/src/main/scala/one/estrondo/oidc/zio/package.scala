@@ -31,7 +31,7 @@ package object zio {
       a.catchAll(f)
   }
 
-  implicit object ZIORefMaker extends RefMaker[OZIO] {
+  implicit object ZIORefMaker extends Ref.Maker[OZIO] {
     override def make[A](initial: A): OZIO[Ref[OZIO, A]] =
       for {
         ref <- ZRef.Synchronized.make(initial)

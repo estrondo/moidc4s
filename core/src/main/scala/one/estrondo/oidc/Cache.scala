@@ -2,7 +2,7 @@ package one.estrondo.oidc
 
 import syntax._
 
-class Cache[F[_], A] private (ref: Ref[F, Cache.Outcome[A]], lookup: Lookup[F, A]) {
+private[oidc] class Cache[F[_], A] private (ref: Ref[F, Cache.Outcome[A]], lookup: Lookup[F, A]) {
 
   def get(implicit ctx: Context[F]): F[A] = {
     for {
@@ -48,11 +48,11 @@ class Cache[F[_], A] private (ref: Ref[F, Cache.Outcome[A]], lookup: Lookup[F, A
   }
 }
 
-object Cache {
+private[oidc] object Cache {
 
-  def apply[F[_]: Context: RefMaker, A](lookup: Lookup[F, A]): F[Cache[F, A]] =
+  def apply[F[_]: Context: Ref.Maker, A](lookup: Lookup[F, A]): F[Cache[F, A]] =
     for {
-      ref <- RefMaker[F].make[Outcome[A]](NotDefined)
+      ref <- Ref.maker[F].make[Outcome[A]](NotDefined)
     } yield {
       new Cache(ref, lookup)
     }

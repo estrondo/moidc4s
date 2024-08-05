@@ -9,7 +9,7 @@ import java.security.spec.ECPublicKeySpec
 import java.security.spec.RSAPublicKeySpec
 import scala.util.Try
 
-object Jwa {
+private[oidc] object Jwa {
 
   val Ec  = "EC"
   val RSA = "RSA"

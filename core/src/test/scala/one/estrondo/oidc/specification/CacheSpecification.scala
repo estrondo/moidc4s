@@ -4,13 +4,13 @@ import one.estrondo.oidc.Cache
 import one.estrondo.oidc.Context
 import one.estrondo.oidc.Lookup
 import one.estrondo.oidc.MockedContext
-import one.estrondo.oidc.RefMaker
+import one.estrondo.oidc.Ref
 import one.estrondo.oidc.TestUnit
 import one.estrondo.oidc.TestUnitOps
 import one.estrondo.oidc.syntax._
 
 //noinspection ConvertExpressionToSAM
-class CacheSpecification[F[_]: Context: RefMaker] extends TestUnitOps {
+class CacheSpecification[F[_]: Context: Ref.Maker] extends TestUnitOps {
 
   def u01: TestUnit[F] = mockedTestUnit("It should lookup just once when it is not defined.")(new UnitContext[String] {
 

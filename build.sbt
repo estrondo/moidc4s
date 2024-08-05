@@ -23,6 +23,7 @@ val crossScalacOptions = scalacOptions ++= {
     case Some((3, _))  => List("-source:3.0-migration", "-Wunused:all", "-explain")
     case Some((2, 12)) => List("-Ywarn-unused")
     case Some((2, 13)) => List("-Wunused")
+    case _             => Nil
   }
 }
 
@@ -32,6 +33,7 @@ lazy val root = (project in file("."))
     crossScalaVersions := Nil,
     publish / skip     := true,
   )
+  .enablePlugins(ScalaUnidocPlugin)
   .aggregate(
     core,
     zio,

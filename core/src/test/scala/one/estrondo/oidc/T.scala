@@ -82,7 +82,7 @@ object T {
     override def recover[A, B >: A](a: T[A])(f: Throwable => T[B]): T[B] = Recover(a, f)
   }
 
-  implicit object RefMakerImpl extends RefMaker[T] {
+  implicit object RefMakerImpl extends Ref.Maker[T] {
     override def make[A](initial: A): T[Ref[T, A]] = Pure(new TRef(initial))
   }
 }

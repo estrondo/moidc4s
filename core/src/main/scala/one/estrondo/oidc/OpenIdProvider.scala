@@ -9,7 +9,7 @@ trait OpenIdProvider[F[_]] {
 
 object OpenIdProvider {
 
-  def apply[F[_]: Context: RefMaker](provider: Provider[F]): F[OpenIdProvider[F]] = {
+  def apply[F[_]: Context: Ref.Maker](provider: Provider[F]): F[OpenIdProvider[F]] = {
     for {
       keySetCache <- Cache(KeySetLookup(provider))
     } yield {

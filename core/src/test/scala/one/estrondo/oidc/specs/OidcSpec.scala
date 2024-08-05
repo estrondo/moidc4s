@@ -2,7 +2,6 @@ package one.estrondo.oidc.specs
 
 import one.estrondo.oidc.T
 import one.estrondo.oidc.TestUnit
-import one.estrondo.oidc.syntax._
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 

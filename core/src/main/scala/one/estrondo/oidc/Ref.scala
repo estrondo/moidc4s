@@ -7,12 +7,13 @@ trait Ref[F[_], A] {
   def update(f: A => F[A]): F[Unit]
 }
 
-trait RefMaker[F[_]] {
+object Ref {
 
-  def make[A](initial: A): F[Ref[F, A]]
-}
+  trait Maker[F[_]] {
 
-object RefMaker {
+    def make[A](initial: A): F[Ref[F, A]]
+  }
 
-  @inline def apply[F[_]: RefMaker]: RefMaker[F] = implicitly[RefMaker[F]]
+  def maker[F[_]: Maker]: Maker[F] = implicitly[Maker[F]]
+
 }

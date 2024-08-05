@@ -1,11 +1,11 @@
 package one.estrondo.oidc
 
-case class JwaAlg(
+private[oidc] case class JwaAlg(
     value: String,
     alg: Option[JwaAlg.Algorithm],
 )
 
-object JwaAlg {
+private[oidc] object JwaAlg {
 
   val Hs256 = new JwaAlg("HS256", Some(Mac("HmacSHA256")))
   val Hs384 = new JwaAlg("HS384", Some(Mac("HmacSHA384")))
@@ -35,9 +35,9 @@ object JwaAlg {
     }
   }
 
-  sealed trait Algorithm
+  sealed private[oidc] trait Algorithm
 
-  case class Mac(value: String) extends Algorithm
+  private[oidc] case class Mac(value: String) extends Algorithm
 
-  case class DigitalSignature(value: String) extends Algorithm
+  private[oidc] case class DigitalSignature(value: String) extends Algorithm
 }

@@ -1,6 +1,6 @@
 package one.estrondo.oidc
 
-trait Lookup[F[_], A] {
+private[oidc] trait Lookup[F[_], A] {
 
   def apply()(implicit ctx: Context[F]): F[A]
 
