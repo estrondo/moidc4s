@@ -8,6 +8,6 @@ object JwkSetSourceSpec extends ZioOidcSpec {
 
   def spec = suite("JwkSetSource")(
     test(specs.u01),
-    test(specs.u02)
+    test(specs.u02),
   )
 }

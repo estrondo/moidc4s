@@ -2,6 +2,7 @@ package one.estrondo.oidc.specs
 
 import one.estrondo.oidc.Base64Ops
 import one.estrondo.oidc.ECFixture
+import one.estrondo.oidc.HMacFixture
 import one.estrondo.oidc.Jwa
 import one.estrondo.oidc.JwaAlg
 import one.estrondo.oidc.KeyDescription
@@ -34,7 +35,7 @@ class JwaSpec extends OidcSpec with Base64Ops {
 
       val data      = createRandomData()
       val signature = SignatureOperations.sign(algorithm, data, privateKey)
-      SignatureOperations.verify(algorithm, data, signature, publicKey) should be(true)
+      SignatureOperations.verify(algorithm, data, signature, publicKey)
     }
 
     "read a valid RSA Key" in {
@@ -51,7 +52,30 @@ class JwaSpec extends OidcSpec with Base64Ops {
 
       val data      = createRandomData()
       val signature = SignatureOperations.sign(algorithm, data, privateKey)
-      SignatureOperations.verify(algorithm, data, signature, publicKey) should be(true)
+      SignatureOperations.verify(algorithm, data, signature, publicKey)
+    }
+
+    "read a valid Hmac* key" - {
+      for {
+        (length, fn) <- Seq(
+                          "256" -> HMacFixture.createRandomHs256 _,
+                          "384" -> HMacFixture.createRandomHs384 _,
+                          "512" -> HMacFixture.createRandomHs512 _,
+                        )
+      } {
+        s"read a valid Hmac$length key" in {
+          val (originalKey, jwk) = fn()
+          val algorithm          = JwaAlg.read(jwk).get
+
+          val Success(description)             = Jwa("oct", jwk)
+          val KeyDescription.Secret(secretKey) = description.key
+
+          val data      = createRandomData()
+          val signature = SignatureOperations.sign(algorithm, data, originalKey)
+          SignatureOperations.verify(algorithm, data, signature, secretKey)
+
+        }
+      }
     }
   }
 }

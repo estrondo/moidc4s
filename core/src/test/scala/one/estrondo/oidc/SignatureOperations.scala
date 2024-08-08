@@ -4,23 +4,24 @@ import java.security.Key
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.Signature
-import java.util
 import javax.crypto.Mac
+import org.scalatest.Assertion
+import org.scalatest.matchers.should.Matchers._
 
 object SignatureOperations {
 
-  def verify(alg: JwaAlg, data: Array[Byte], expected: Array[Byte], key: Key): Boolean = {
+  def verify(alg: JwaAlg, data: Array[Byte], expected: Array[Byte], key: Key): Assertion = {
     alg.alg match {
       case Some(JwaAlg.Mac(value))              =>
         val mac  = Mac.getInstance(value)
         mac.init(key)
         val hash = mac.doFinal(data)
-        util.Arrays.equals(hash, hash)
+        hash should be(expected)
       case Some(JwaAlg.DigitalSignature(value)) =>
         val signature = Signature.getInstance(value)
         signature.initVerify(key.asInstanceOf[PublicKey])
         signature.update(data)
-        signature.verify(expected)
+        signature.verify(expected) should be(true)
       case _                                    => ???
     }
   }

@@ -7,6 +7,7 @@ import java.security.spec.ECParameterSpec
 import java.security.spec.ECPoint
 import java.security.spec.ECPublicKeySpec
 import java.security.spec.RSAPublicKeySpec
+import javax.crypto.spec.SecretKeySpec
 import scala.util.Try
 
 private[oidc] object Jwa {
@@ -25,7 +26,7 @@ private[oidc] object Jwa {
     val key = kty match {
       case Ec  => ec(jwk)
       case RSA => rsa(jwk)
-      case Oct => oct(jwk)
+      case Oct => oct(jwk, alg)
       case _   => throw new OidcException.InvalidJwk(s"Unsupported kty: $kty.")
     }
 
@@ -48,8 +49,8 @@ private[oidc] object Jwa {
     val param = AlgorithmParameters.getInstance("EC")
     param.init(new ECGenParameterSpec(crv))
 
-    val x = B64.decodeUrlEncoded("x", jwk.x)
-    val y = B64.decodeUrlEncoded("y", jwk.y)
+    val x = B64.decodeUrlEncodedAsBigInteger("x", jwk.x)
+    val y = B64.decodeUrlEncodedAsBigInteger("y", jwk.y)
 
     val spec = new ECPublicKeySpec(
       new ECPoint(x, y),
@@ -60,8 +61,8 @@ private[oidc] object Jwa {
   }
 
   private def rsa(jwk: Jwk): KeyDescription.Key = {
-    val n = B64.decodeUrlEncoded("n", jwk.n)
-    val e = B64.decodeUrlEncoded("e", jwk.e)
+    val n = B64.decodeUrlEncodedAsBigInteger("n", jwk.n)
+    val e = B64.decodeUrlEncodedAsBigInteger("e", jwk.e)
 
     val spec = new RSAPublicKeySpec(n, e)
     KeyDescription.Public(keyFactory("RSA").generatePublic(spec))
@@ -71,7 +72,16 @@ private[oidc] object Jwa {
     KeyFactory.getInstance(algorithm)
   }
 
-  private def oct(jwk: Jwk): KeyDescription.Key = {
-    ???
+  private def oct(jwk: Jwk, alg: Option[JwaAlg]): KeyDescription.Key = {
+    alg match {
+      case Some(JwaAlg(_, Some(JwaAlg.Mac(algorithm)))) =>
+        val k             = B64.decodeUrlEncoded("k", jwk.k)
+        val secretKeySpec = new SecretKeySpec(k, algorithm)
+        KeyDescription.Secret(secretKeySpec)
+
+      case _ =>
+        throw new OidcException.InvalidJwk("Invalid algorithm!")
+    }
+
   }
 }
