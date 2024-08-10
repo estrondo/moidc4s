@@ -12,13 +12,13 @@ object ECFixture extends Base64Ops {
 
   type Output = (PublicKey, PrivateKey, Jwk)
 
-  def createRandomP521(alg: Option[JwaAlg] = None): Output = generate("secp521r1", "P-521", alg)
+  def createRandomP512(): Output = generate("secp521r1", "P-521", JwaAlg.Es512)
 
-  def createRandomP384(alg: Option[JwaAlg] = None): Output = generate("secp384r1", "P-384", alg)
+  def createRandomP384(): Output = generate("secp384r1", "P-384", JwaAlg.Es384)
 
-  def createRandomP256(alg: Option[JwaAlg] = None): Output = generate("secp256r1", "P-256", alg)
+  def createRandomP256(): Output = generate("secp256r1", "P-256", JwaAlg.Es256)
 
-  private def generate(curve: String, crv: String, alg: Option[JwaAlg]): Output = {
+  private def generate(curve: String, crv: String, alg: JwaAlg): Output = {
     val generator = KeyPairGenerator.getInstance("EC")
     val factory   = KeyFactory.getInstance("EC")
 
@@ -37,7 +37,7 @@ object ECFixture extends Base64Ops {
         x = Some(x),
         y = Some(y),
         crv = Some(crv),
-        alg = alg.map(_.value),
+        alg = Some(alg.value),
       ),
     )
   }

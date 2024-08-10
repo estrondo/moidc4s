@@ -21,38 +21,53 @@ class JwaSpec extends OidcSpec with Base64Ops {
 
   "Jwa should" - {
 
-    "read a valid EC Key." in {
+    "read a valid EC Key." - {
 
-      val (_, privateKey, jwk) = ECFixture.createRandomP521(Some(JwaAlg.Es512))
-      val algorithm            = JwaAlg.read(jwk).get
+      for (
+        (x, fn) <- Seq(
+                     JwaAlg.Es256 -> ECFixture.createRandomP256 _,
+                     JwaAlg.Es384 -> ECFixture.createRandomP384 _,
+                     JwaAlg.Es512 -> ECFixture.createRandomP512 _,
+                   )
+      ) {
+        s"${x.value}" in {
+          val (_, privateKey, jwk) = fn()
+          val algorithm            = JwaAlg.read(jwk).get
 
-      val Success(description) = Jwa(
-        "EC",
-        jwk,
-      )
+          val Success(description) = Jwa(
+            "EC",
+            jwk,
+          )
 
-      val KeyDescription.Public(publicKey) = description.key
+          val KeyDescription.Public(publicKey) = description.key
 
-      val data      = createRandomData()
-      val signature = SignatureOperations.sign(algorithm, data, privateKey)
-      SignatureOperations.verify(algorithm, data, signature, publicKey)
+          val data      = createRandomData()
+          val signature = SignatureOperations.sign(algorithm, data, privateKey)
+          SignatureOperations.verify(algorithm, data, signature, publicKey)
+        }
+      }
     }
 
-    "read a valid RSA Key" in {
+    "read a valid RSA Key" - {
 
-      val (_, privateKey, jwk) = RSAFixture.createRandom(JwaAlg.Rs512)
-      val algorithm            = JwaAlg.read(jwk).get
+      for (x <- Seq(JwaAlg.Rs256, JwaAlg.Rs384, JwaAlg.Rs512)) {
+        x.value in {
+          val (_, privateKey, jwk) = RSAFixture.createRandom(x)
+          val algorithm            = JwaAlg.read(jwk).get
 
-      val Success(description) = Jwa(
-        "RSA",
-        jwk,
-      )
+          val Success(description) = Jwa(
+            "RSA",
+            jwk,
+          )
 
-      val KeyDescription.Public(publicKey) = description.key
+          val KeyDescription.Public(publicKey) = description.key
 
-      val data      = createRandomData()
-      val signature = SignatureOperations.sign(algorithm, data, privateKey)
-      SignatureOperations.verify(algorithm, data, signature, publicKey)
+          val data      = createRandomData()
+          val signature = SignatureOperations.sign(algorithm, data, privateKey)
+          SignatureOperations.verify(algorithm, data, signature, publicKey)
+        }
+      }
+
     }
 
     "read a valid Hmac* key" - {
@@ -63,7 +78,7 @@ class JwaSpec extends OidcSpec with Base64Ops {
                           "512" -> HMacFixture.createRandomHs512 _,
                         )
       } {
-        s"read a valid Hmac$length key" in {
+        s"Hmac$length" in {
           val (originalKey, jwk) = fn()
           val algorithm          = JwaAlg.read(jwk).get
 
