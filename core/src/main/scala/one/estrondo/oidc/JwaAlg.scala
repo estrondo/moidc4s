@@ -2,12 +2,12 @@ package one.estrondo.oidc
 
 import scala.collection.immutable.HashSet
 
-private[oidc] case class JwaAlg(
+case class JwaAlg(
     value: String,
     alg: Option[JwaAlg.Algorithm],
 )
 
-private[oidc] object JwaAlg {
+object JwaAlg {
 
   val Hs256 = new JwaAlg("HS256", Some(Mac("HmacSHA256")))
   val Hs384 = new JwaAlg("HS384", Some(Mac("HmacSHA384")))
@@ -32,7 +32,7 @@ private[oidc] object JwaAlg {
     Es512,
   )
 
-  def read(jwk: Jwk): Option[JwaAlg] = {
+  private[oidc] def read(jwk: Jwk): Option[JwaAlg] = {
     for (alg <- jwk.alg) yield alg match {
       case "HS256"           => Hs256
       case "HS384"           => Hs384
@@ -49,9 +49,9 @@ private[oidc] object JwaAlg {
     }
   }
 
-  sealed private[oidc] trait Algorithm
+  sealed trait Algorithm
 
-  private[oidc] case class Mac(value: String) extends Algorithm
+  case class Mac(value: String) extends Algorithm
 
-  private[oidc] case class DigitalSignature(value: String) extends Algorithm
+  case class DigitalSignature(value: String) extends Algorithm
 }
