@@ -4,12 +4,12 @@ import one.estrondo.oidc.syntax._
 
 trait OpenIdProvider[F[_]] {
 
-  def evaluate[J](token: String)(implicit jwt: JwtFramework[F, J], ctx: Context[F]): F[J]
+  def evaluate[J](jwtFramework: JwtFramework[F, J])(token: String)(implicit ctx: Context[F]): F[J]
 }
 
 object OpenIdProvider {
 
-  def apply[F[_]: Context: Ref.Maker](provider: Provider[F]): F[OpenIdProvider[F]] = {
+  def apply[F[_]: Context: JsonFramework: Ref.Maker](provider: Provider[F]): F[OpenIdProvider[F]] = {
     for {
       keySetCache <- Cache(KeySetLookup(provider))
     } yield {
@@ -17,13 +17,16 @@ object OpenIdProvider {
     }
   }
 
-  private class Impl[F[_]](keySetCache: Cache[F, KeySet]) extends OpenIdProvider[F] {
+  private class Impl[F[_]: JsonFramework](keySetCache: Cache[F, KeySet]) extends OpenIdProvider[F] {
 
-    override def evaluate[J](token: String)(implicit jwt: JwtFramework[F, J], ctx: Context[F]): F[J] = {
+    override def evaluate[J](jwtFramework: JwtFramework[F, J])(token: String)(implicit ctx: Context[F]): F[J] = {
       for {
-        keySet <- keySetCache.get
+        header         <- HeaderExtractor(token)
+        keySet         <- keySetCache.get
+        keyDescription <- KeyFinder(header, keySet)
+        output         <- jwtFramework(token, keyDescription)
       } yield {
-        ???
+        output
       }
     }
   }

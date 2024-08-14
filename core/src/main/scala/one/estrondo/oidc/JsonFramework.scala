@@ -5,6 +5,8 @@ trait JsonFramework[F[_]] {
   def metadata(body: String): F[Metadata]
 
   def jwkSet(body: String): F[JwkSet]
+
+  def jwtHeader(body: String): F[JwtHeader]
 }
 
 object JsonFramework {

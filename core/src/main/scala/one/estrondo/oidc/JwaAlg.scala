@@ -1,5 +1,7 @@
 package one.estrondo.oidc
 
+import scala.collection.immutable.HashSet
+
 private[oidc] case class JwaAlg(
     value: String,
     alg: Option[JwaAlg.Algorithm],
@@ -17,6 +19,18 @@ private[oidc] object JwaAlg {
   val Es384 = new JwaAlg("ES384", Some(DigitalSignature("SHA384withECDSA")))
   val Es512 = new JwaAlg("ES512", Some(DigitalSignature("SHA512withECDSA")))
   val None  = new JwaAlg("none", scala.None)
+
+  def all: Set[JwaAlg] = HashSet(
+    Hs256,
+    Hs384,
+    Hs512,
+    Rs256,
+    Rs384,
+    Rs512,
+    Es256,
+    Es384,
+    Es512,
+  )
 
   def read(jwk: Jwk): Option[JwaAlg] = {
     for (alg <- jwk.alg) yield alg match {

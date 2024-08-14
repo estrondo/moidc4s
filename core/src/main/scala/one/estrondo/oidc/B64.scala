@@ -1,11 +1,16 @@
 package one.estrondo.oidc
 
 import java.math.BigInteger
+import java.nio.charset.StandardCharsets
 import java.util.Base64
 
 private[oidc] object B64 {
 
   lazy val UrlDecoder: Base64.Decoder = Base64.getUrlDecoder
+
+  def decodeUrlEncodedAsString(encoded: String): String = {
+    new String(UrlDecoder.decode(encoded), StandardCharsets.UTF_8)
+  }
 
   def decodeUrlEncodedAsBigInteger(name: String, parameter: Option[String]): BigInteger = {
     new BigInteger(decodeUrlEncoded(name, parameter))

@@ -1,6 +1,7 @@
 package one.estrondo.oidc
 
 import java.math.BigInteger
+import java.nio.charset.StandardCharsets
 import java.util.Base64
 
 trait Base64Ops {
@@ -9,6 +10,9 @@ trait Base64Ops {
 
   def encodeBase64UrlEncoded(x: BigInteger): String =
     encodeBase64UrlEncoded(x.toByteArray)
+
+  def encodeBase64UrlEncoded(x: String): String =
+    encodeBase64UrlEncoded(x.getBytes(StandardCharsets.UTF_8))
 
   def encodeBase64UrlEncoded(x: Array[Byte]): String =
     base64UrlEncoder.encodeToString(x)
