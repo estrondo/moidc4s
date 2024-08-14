@@ -1,7 +1,5 @@
 package one.estrondo.oidc
 
-import java.util.UUID
-
 object JwtHeaderFixture {
 
   def createRandom(): JwtHeader = JwtHeader(

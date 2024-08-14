@@ -1,7 +1,6 @@
 package one.estrondo.oidc
 
 import Base64Ops._
-import java.util.UUID
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 import scala.util.Random

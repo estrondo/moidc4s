@@ -16,6 +16,7 @@ object KeyDescriptionFixture {
       case JwaAlg.Rs512 => create(jwaAlg, RSAFixture.createRandom(jwaAlg)._1)
       case JwaAlg.Rs384 => create(jwaAlg, RSAFixture.createRandom(jwaAlg)._1)
       case JwaAlg.Rs256 => create(jwaAlg, RSAFixture.createRandom(jwaAlg)._1)
+      case _            => ???
     }
   }
 

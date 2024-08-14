@@ -7,7 +7,6 @@ import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.spec.ECGenParameterSpec
 import java.security.spec.ECPublicKeySpec
-import java.util.UUID
 
 object ECFixture {
 

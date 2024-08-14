@@ -8,6 +8,8 @@ hs_err_pid*
 /core/target/
 /target/
 /project/project/
+/zio-http/target/
+/zio-json/target/
 
 /.idea/
 /.bsp/

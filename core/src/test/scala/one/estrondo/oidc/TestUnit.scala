@@ -9,7 +9,7 @@ trait TestUnitOps {
     TestUnit[F](fullName, block.verified)
   }
 
-  protected def testUnit[F[_]: Context](name: String)(block: TestUnitContext[F]): TestUnit[F] = {
+  protected def testUnit[F[_]](name: String)(block: TestUnitContext[F]): TestUnit[F] = {
     val fullName = s"${getClass.getSimpleName.replaceAll("Specification$", "")}: $name"
     TestUnit[F](fullName, block());
   }

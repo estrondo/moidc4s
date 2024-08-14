@@ -1,0 +1,13 @@
+{
+  "request": {
+    "url": "/4xx",
+    "method": "GET"
+  },
+  "response": {
+    "status": 400,
+    "body": "You should rethink what you want!",
+    "headers": {
+      "Content-type": "text/plain;string=bad"
+    }
+  }
+}

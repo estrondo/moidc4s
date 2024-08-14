@@ -1,6 +1,6 @@
 package one.estrondo.oidc
 
-sealed abstract class OidcException(message: String = null, cause: Throwable = null)
+abstract class OidcException(message: String = null, cause: Throwable = null)
     extends RuntimeException(message, cause, false, false)
 
 object OidcException {
