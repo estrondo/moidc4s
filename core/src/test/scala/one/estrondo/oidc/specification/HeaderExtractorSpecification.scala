@@ -1,16 +1,16 @@
 package one.estrondo.oidc.specification
 
-import one.estrondo.oidc.Base64Ops
+import one.estrondo.oidc.Base64Ops._
 import one.estrondo.oidc.Context
 import one.estrondo.oidc.HeaderExtractor
 import one.estrondo.oidc.JsonFramework
 import one.estrondo.oidc.JwtHeaderFixture
-import one.estrondo.oidc.MockedContext
+import one.estrondo.oidc.MockedTestContext
 import one.estrondo.oidc.TestUnitOps
 import one.estrondo.oidc.syntax._
 import org.scalatest.Assertion
 
-class HeaderExtractorSpecification[F[_]: Context] extends TestUnitOps with Base64Ops {
+class HeaderExtractorSpecification[F[_]: Context] extends TestUnitOps {
 
   val u01 = mockedTestUnit[F]("It should extract a header properly.")(new C {
 
@@ -31,7 +31,7 @@ class HeaderExtractorSpecification[F[_]: Context] extends TestUnitOps with Base6
     }
   })
 
-  abstract class C extends MockedContext[F] {
+  abstract class C extends MockedTestContext[F] {
     implicit val jsonFramework: JsonFramework[F] = mock[JsonFramework[F]]
   }
 }

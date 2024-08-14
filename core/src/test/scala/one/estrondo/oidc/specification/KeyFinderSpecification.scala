@@ -8,7 +8,7 @@ import one.estrondo.oidc.KeyDescription
 import one.estrondo.oidc.KeyDescriptionFixture
 import one.estrondo.oidc.KeyFinder
 import one.estrondo.oidc.KeySet
-import one.estrondo.oidc.TestContext
+import one.estrondo.oidc.TestUnitContext
 import one.estrondo.oidc.TestUnitOps
 import one.estrondo.oidc.syntax._
 import org.scalatest.Assertion
@@ -78,11 +78,11 @@ class KeyFinderSpecification[F[_]: Context] extends TestUnitOps {
   })
 
   // noinspection TypeAnnotation
-  abstract class U extends TestContext[F] {
-    lazy val keys = HashMap.from(for (jwaAlg <- JwaAlg.all) yield {
+  abstract class U extends TestUnitContext[F] {
+    lazy val keys = HashMap((for (jwaAlg <- JwaAlg.all.toSeq) yield {
       val keyDescription = KeyDescriptionFixture.createRandom(jwaAlg)
       keyDescription.kid.get -> keyDescription
-    })
+    }): _*)
 
     lazy val keySet = KeySet(byKid = keys, withoutKid = Nil)
   }

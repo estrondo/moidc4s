@@ -1,5 +1,6 @@
 package one.estrondo.oidc
 
+import Base64Ops._
 import java.security.KeyFactory
 import java.security.KeyPairGenerator
 import java.security.PrivateKey
@@ -8,7 +9,7 @@ import java.security.spec.ECGenParameterSpec
 import java.security.spec.ECPublicKeySpec
 import java.util.UUID
 
-object ECFixture extends Base64Ops {
+object ECFixture {
 
   type Output = (PublicKey, PrivateKey, Jwk)
 
@@ -32,7 +33,7 @@ object ECFixture extends Base64Ops {
       pair.getPublic,
       pair.getPrivate,
       Jwk(
-        kid = Some(UUID.randomUUID().toString),
+        kid = Some(Fixtures.randomId()),
         kty = Some("EC"),
         x = Some(x),
         y = Some(y),

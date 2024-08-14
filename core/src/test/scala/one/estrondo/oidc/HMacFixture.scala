@@ -1,11 +1,12 @@
 package one.estrondo.oidc
 
+import Base64Ops._
 import java.util.UUID
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 import scala.util.Random
 
-object HMacFixture extends Base64Ops {
+object HMacFixture {
 
   type Output = (SecretKey, Jwk)
 
@@ -22,7 +23,7 @@ object HMacFixture extends Base64Ops {
     (
       new SecretKeySpec(key, alg.alg.get.asInstanceOf[JwaAlg.Mac].value),
       Jwk(
-        kid = Some(UUID.randomUUID().toString),
+        kid = Some(Fixtures.randomId()),
         kty = Some("oct"),
         alg = Some(alg.value),
         k = Some(encodeBase64UrlEncoded(key)),

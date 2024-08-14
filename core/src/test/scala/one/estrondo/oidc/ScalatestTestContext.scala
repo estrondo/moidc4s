@@ -8,7 +8,7 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
-trait ScalatestSpec[F[_]] extends Matchers with TryValues with OptionValues {
+trait ScalatestTestContext[F[_]] extends Matchers with TryValues with OptionValues {
 
   implicit class FTry[A](a: F[A]) {
     def toTry(implicit ctx: Context[F]): F[Try[A]] = {

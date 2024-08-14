@@ -4,7 +4,7 @@ import one.estrondo.oidc.syntax._
 import org.scalamock.MockFactoryBase
 import org.scalatest.Assertion
 
-trait MockedContext[F[_]] extends (() => F[Assertion]) with MockFactoryBase with ScalatestSpec[F] {
+trait MockedTestContext[F[_]] extends (() => F[Assertion]) with MockFactoryBase with ScalatestTestContext[F] {
 
   override type ExpectationException = Exception
 

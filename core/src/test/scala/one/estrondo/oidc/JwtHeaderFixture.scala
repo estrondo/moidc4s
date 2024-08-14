@@ -6,6 +6,6 @@ object JwtHeaderFixture {
 
   def createRandom(): JwtHeader = JwtHeader(
     alg = Some(Fixtures.pickOne(JwaAlg.all.map(_.value).toSeq: _*)),
-    kid = Some(UUID.randomUUID().toString),
+    kid = Some(Fixtures.randomId()),
   )
 }

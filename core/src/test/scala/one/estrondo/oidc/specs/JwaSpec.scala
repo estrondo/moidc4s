@@ -1,6 +1,5 @@
 package one.estrondo.oidc.specs
 
-import one.estrondo.oidc.Base64Ops
 import one.estrondo.oidc.ECFixture
 import one.estrondo.oidc.HMacFixture
 import one.estrondo.oidc.Jwa
@@ -11,7 +10,7 @@ import one.estrondo.oidc.SignatureOperations
 import scala.util.Random
 import scala.util.Success
 
-class JwaSpec extends OidcSpec with Base64Ops {
+class JwaSpec extends OidcSpec {
 
   private def createRandomData(): Array[Byte] = {
     val bytes = Array.ofDim[Byte](1024 * 32)

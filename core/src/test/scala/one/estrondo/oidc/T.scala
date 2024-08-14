@@ -17,19 +17,13 @@ object T {
     }
   }
 
-  object Pure {
-    def apply[A](a: => A): Pure[A] = {
-      new Pure(() => a)
-    }
-  }
-
-  case class Failed[A](cause: Throwable) extends T[A] {
+  class Failed[A](cause: Throwable) extends T[A] {
     override def run[O](out: A => O): Try[O] = {
       Failure(cause)
     }
   }
 
-  case class FlatMap[A, B](a: T[A], f: A => T[B]) extends T[B] {
+  class FlatMap[A, B](a: T[A], f: A => T[B]) extends T[B] {
     override def run[O](out: B => O): Try[O] = {
       a.run(f) match {
         case Success(a)     => a.run(out)
@@ -38,7 +32,7 @@ object T {
     }
   }
 
-  case class Map[A, B](a: T[A], f: A => B) extends T[B] {
+  class Map[A, B](a: T[A], f: A => B) extends T[B] {
     override def run[O](out: B => O): Try[O] = {
       a.run(f) match {
         case Success(b)     => Success(out(b))
@@ -47,7 +41,7 @@ object T {
     }
   }
 
-  case class MapError[A](a: T[A], f: Throwable => Throwable) extends T[A] {
+  class MapError[A](a: T[A], f: Throwable => Throwable) extends T[A] {
     override def run[O](out: A => O): Try[O] = {
       a.run(out) match {
         case Success(o) => Success(o)
@@ -56,7 +50,7 @@ object T {
     }
   }
 
-  case class Recover[A, B >: A](a: T[A], f: Throwable => T[B]) extends T[B] {
+  class Recover[A, B >: A](a: T[A], f: Throwable => T[B]) extends T[B] {
     override def run[O](out: B => O): Try[O] = {
       a.run(identity) match {
         case Success(a)     => Success(out(a))
@@ -67,29 +61,29 @@ object T {
 
   implicit object ContextImpl extends Context[T] {
 
-    override val done: T[Unit] = Pure(())
+    override val done: T[Unit] = new Pure(() => ())
 
-    override def pure[A](a: A): T[A] = Pure(a)
+    override def pure[A](a: A): T[A] = new Pure(() => a)
 
-    override def failed[A](cause: Throwable): T[A] = Failed(cause)
+    override def failed[A](cause: Throwable): T[A] = new Failed(cause)
 
-    override def flatMap[A, B](a: T[A])(f: A => T[B]): T[B] = FlatMap(a, f)
+    override def flatMap[A, B](a: T[A])(f: A => T[B]): T[B] = new FlatMap(a, f)
 
-    override def map[A, B](a: T[A])(f: A => B): T[B] = Map(a, f)
+    override def map[A, B](a: T[A])(f: A => B): T[B] = new Map(a, f)
 
-    override def mapError[A](a: T[A])(f: Throwable => Throwable): T[A] = MapError(a, f)
+    override def mapError[A](a: T[A])(f: Throwable => Throwable): T[A] = new MapError(a, f)
 
-    override def recover[A, B >: A](a: T[A])(f: Throwable => T[B]): T[B] = Recover(a, f)
+    override def recover[A, B >: A](a: T[A])(f: Throwable => T[B]): T[B] = new Recover(a, f)
   }
 
   implicit object RefMakerImpl extends Ref.Maker[T] {
-    override def make[A](initial: A): T[Ref[T, A]] = Pure(new TRef(initial))
+    override def make[A](initial: A): T[Ref[T, A]] = new Pure(() => new TRef(initial))
   }
 }
 
 class TRef[A](private var current: A) extends Ref[T, A] {
 
-  override def get: T[A] = T.Pure(current)
+  override def get: T[A] = new T.Pure(() => current)
 
   override def update(f: A => T[A]): T[Unit] = {
     f(current).run(identity) match {
@@ -97,7 +91,7 @@ class TRef[A](private var current: A) extends Ref[T, A] {
         current = a
         T.ContextImpl.done
       case Failure(c) =>
-        T.Failed(c)
+        new T.Failed(c)
     }
   }
 }

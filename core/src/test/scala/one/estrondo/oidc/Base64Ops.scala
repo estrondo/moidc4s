@@ -4,6 +4,8 @@ import java.math.BigInteger
 import java.nio.charset.StandardCharsets
 import java.util.Base64
 
+object Base64Ops extends Base64Ops
+
 trait Base64Ops {
 
   val base64UrlEncoder: Base64.Encoder = Base64.getUrlEncoder

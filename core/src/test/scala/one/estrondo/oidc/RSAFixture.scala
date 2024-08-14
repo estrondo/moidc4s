@@ -5,9 +5,9 @@ import java.security.KeyPairGenerator
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.spec.RSAPublicKeySpec
-import java.util.UUID
+import one.estrondo.oidc.Base64Ops._
 
-object RSAFixture extends Base64Ops {
+object RSAFixture {
 
   type Out = (PublicKey, PrivateKey, Jwk)
 
@@ -22,7 +22,7 @@ object RSAFixture extends Base64Ops {
       pair.getPrivate,
       Jwk(
         alg = Some(alg.value),
-        kid = Some(UUID.randomUUID().toString),
+        kid = Some(Fixtures.randomId()),
         kty = Some("RSA"),
         n = Some(encodeBase64UrlEncoded(publicKey.getModulus)),
         e = Some(encodeBase64UrlEncoded(publicKey.getPublicExponent)),

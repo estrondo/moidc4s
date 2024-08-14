@@ -5,7 +5,7 @@ import one.estrondo.oidc.JsonFramework
 import one.estrondo.oidc.JwkSetFixture
 import one.estrondo.oidc.JwkSetSource
 import one.estrondo.oidc.MetadataFixture
-import one.estrondo.oidc.MockedContext
+import one.estrondo.oidc.MockedTestContext
 import one.estrondo.oidc.Provider
 import one.estrondo.oidc.TestUnitOps
 import one.estrondo.oidc.Transporter
@@ -16,7 +16,7 @@ import org.scalatest.Assertion
 //noinspection ConvertExpressionToSAM
 class JwkSetSourceSpecification[F[_]: Context] extends TestUnitOps with Mock {
 
-  val u01 = mockedTestUnit[F]("Getting a JwkSet from an Open ID Connect Discovery.")(new DiscoverContext {
+  val u01 = mockedTestUnit[F]("Getting a JwkSet from an Open ID Connect Discovery.")(new DiscoverTestContext {
     override def apply(): F[Assertion] = {
       (transporter.get _)
         .expects(url)
@@ -46,7 +46,7 @@ class JwkSetSourceSpecification[F[_]: Context] extends TestUnitOps with Mock {
     }
   })
 
-  val u02 = mockedTestUnit[F]("Getting a JwkSet from a JwkSet Uri.")(new JwkSetUriContext {
+  val u02 = mockedTestUnit[F]("Getting a JwkSet from a JwkSet Uri.")(new JwkSetUriTestContext {
     override def apply(): F[Assertion] = {
       (transporter.get _)
         .expects(url)
@@ -66,14 +66,14 @@ class JwkSetSourceSpecification[F[_]: Context] extends TestUnitOps with Mock {
     }
   })
 
-  abstract class DiscoverContext extends MockedContext[F] {
+  abstract class DiscoverTestContext extends MockedTestContext[F] {
     val url           = "https://estrondo.one/"
     val transporter   = mock[Transporter[F]]
     val jsonFramework = mock[JsonFramework[F]]
     val source        = JwkSetSource(Provider.Discovery(url)(transporter, jsonFramework))
   }
 
-  abstract class JwkSetUriContext extends MockedContext[F] {
+  abstract class JwkSetUriTestContext extends MockedTestContext[F] {
     val url           = "https://estrondo.one/"
     val transporter   = mock[Transporter[F]]
     val jsonFramework = mock[JsonFramework[F]]
