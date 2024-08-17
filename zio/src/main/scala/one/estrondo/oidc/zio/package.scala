@@ -1,12 +1,11 @@
 package one.estrondo.oidc
 
 import _root_.zio.{Ref => ZRef}
-import _root_.zio.Task
 import _root_.zio.ZIO
 
 package object zio {
 
-  type OZIO[A] = Task[A]
+  type OZIO[A] = ZIO[Any, Throwable, A]
 
   implicit object ZIOContext extends Context[OZIO] {
     override val done: OZIO[Unit] =

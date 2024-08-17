@@ -12,9 +12,9 @@ import zio.json.JsonDecoder
 package object json {
 
   // noinspection SpellCheckingInspection
-  type JZIO[A] = ZIO[Any, Throwable, A]
+  type JsonZIO[A] = ZIO[Any, Throwable, A]
 
-  implicit val Implicit: JsonFramework[JZIO] = ZIOJsonFramework
+  implicit val Implicit: JsonFramework[JsonZIO] = ZIOJsonFramework
 
   implicit val metadataDecoder: JsonDecoder[Metadata] = DeriveJsonDecoder.gen[Metadata]
 

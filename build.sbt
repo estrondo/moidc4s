@@ -21,25 +21,17 @@ inThisBuild(
   Seq(
     scalaVersion := scala3,
     organization := "one.estrondo",
-    version      := "0.0.1-SNAPSHOT",
+    version      := "0.1.0",
   ),
 )
 
-val crossScalacOptions = scalacOptions ++= {
+val crossScalacOptions = Def.task {
   CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((3, _))  => List("-source:3.0-migration", "-Wunused:all", "-explain")
-    case Some((2, 12)) => List("-Ywarn-unused")
-    case Some((2, 13)) => List("-Wunused")
-    case _             => Nil
+    case Some((3, _))  => Seq("-source:3.0-migration", "-Wunused:all", "-explain")
+    case Some((2, 12)) => Seq("-Ywarn-unused")
+    case Some((2, 13)) => Seq("-Wunused")
+    case _             => Seq.empty
   }
-}
-
-val Dependencies = new {
-  val zio = libraryDependencies ++= Seq(
-    "dev.zio" %% "zio"          % Versions.zio,
-    "dev.zio" %% "zio-test"     % Versions.zio % Test,
-    "dev.zio" %% "zio-test-sbt" % Versions.zio % Test,
-  )
 }
 
 lazy val root = (project in file("."))
@@ -61,19 +53,23 @@ lazy val core = (project in file("core"))
     name                                   := "oidc4s-core",
     crossScalaVersions                     := supportedScalaVersions,
     isSnapshot                             := Build.isSnapshot,
-    crossScalacOptions,
+    scalacOptions ++= crossScalacOptions.value,
     libraryDependencies += "org.scalatest" %% "scalatest" % Versions.scalaTest % Test,
     libraryDependencies += "org.scalamock" %% "scalamock" % Versions.scalaMock % Test,
   )
 
 lazy val zio = (project in file("zio"))
   .settings(
-    name                                  := "oidc4s-zio",
-    crossScalaVersions                    := supportedScalaVersions,
-    isSnapshot                            := Build.isSnapshot,
-    crossScalacOptions,
-    Dependencies.zio,
-    libraryDependencies += "com.dimafeng" %% "testcontainers-scala-core" % Versions.testContainers % Test,
+    name               := "oidc4s-zio",
+    crossScalaVersions := supportedScalaVersions,
+    isSnapshot         := Build.isSnapshot,
+    scalacOptions ++= crossScalacOptions.value,
+    libraryDependencies ++= Seq(
+      "dev.zio"      %% "zio"                       % Versions.zio,
+      "dev.zio"      %% "zio-test"                  % Versions.zio            % Test,
+      "dev.zio"      %% "zio-test-sbt"              % Versions.zio            % Test,
+      "com.dimafeng" %% "testcontainers-scala-core" % Versions.testContainers % Test,
+    ),
   )
   .dependsOn(
     core % "compile->compile;test->test",
@@ -85,7 +81,7 @@ lazy val zioHttp = (project in file("zio-http"))
     crossScalaVersions       := supportedScalaVersions,
     isSnapshot               := Build.isSnapshot,
     Test / parallelExecution := false,
-    crossScalacOptions,
+    scalacOptions ++= crossScalacOptions.value,
     libraryDependencies ++= Seq(
       "dev.zio"      %% "zio-http"                      % Versions.zioHttp,
       "com.dimafeng" %% "testcontainers-scala-wiremock" % Versions.testContainers % Test,
@@ -104,13 +100,12 @@ lazy val zioJson = (project in file("zio-json"))
     name               := "oidc4s-zio-json",
     crossScalaVersions := supportedScalaVersions,
     isSnapshot         := Build.isSnapshot,
-    crossScalacOptions,
-    Dependencies.zio,
+    scalacOptions ++= crossScalacOptions.value,
     libraryDependencies ++= Seq(
       "dev.zio" %% "zio-json" % Versions.zioJson,
     ),
   )
   .dependsOn(
     core % "compile->compile;test->test",
-    zio  % "test->test",
+    zio  % "compile->compile;test->test",
   )

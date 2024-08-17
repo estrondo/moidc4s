@@ -5,9 +5,9 @@ import one.estrondo.oidc.Transporter
 import zio.http.Client
 import zio.http.Request
 
-object HttpTransporter extends Transporter[OHttp] {
+object HttpTransporter extends Transporter[HttpZIO] {
 
-  override def get(url: String): OHttp[Transporter.Response] = {
+  override def get(url: String): HttpZIO[Transporter.Response] = {
     for {
       response <- Client.request(Request.get(url))
       body     <- response.body.asString(StandardCharsets.UTF_8)
