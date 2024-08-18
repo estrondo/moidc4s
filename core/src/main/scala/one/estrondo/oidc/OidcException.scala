@@ -37,4 +37,6 @@ object OidcException {
   class InvalidJwt(message: String, cause: Throwable = null) extends OidcException(message, cause)
 
   class AmbiguousException(message: String, cause: Throwable = null) extends OidcException(message, cause)
+
+  class UnsupportedAlgorithm(message: String, cause: Throwable = null) extends OidcException(message, cause)
 }

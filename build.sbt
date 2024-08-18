@@ -15,6 +15,7 @@ val Versions = new {
   val zioHttp        = "3.0.0-RC9"
   val testContainers = "0.41.4"
   val zioJson        = "0.7.2"
+  val jwt            = "10.0.1"
 }
 
 inThisBuild(
@@ -46,6 +47,8 @@ lazy val root = (project in file("."))
     zio,
     zioHttp,
     zioJson,
+    jwtScalaCore,
+    jwtScalaZio,
   )
 
 lazy val core = (project in file("core"))
@@ -108,4 +111,32 @@ lazy val zioJson = (project in file("zio-json"))
   .dependsOn(
     core % "compile->compile;test->test",
     zio  % "compile->compile;test->test",
+  )
+
+lazy val jwtScalaCore = (project in file("jwt-scala-core"))
+  .settings(
+    name               := "oidc4s-jwt-scala-core",
+    crossScalaVersions := supportedScalaVersions,
+    scalacOptions ++= crossScalacOptions.value,
+    isSnapshot         := Build.isSnapshot,
+    libraryDependencies ++= Seq(
+      "com.github.jwt-scala" %% "jwt-core" % Versions.jwt,
+    ),
+  )
+  .dependsOn(
+    core % "compile->compile;test->test",
+  )
+
+lazy val jwtScalaZio = (project in file("jwt-scala-zio"))
+  .settings(
+    name               := "oidc4s-jwt-scala-zio",
+    crossScalaVersions := supportedScalaVersions,
+    scalacOptions ++= crossScalacOptions.value,
+    libraryDependencies ++= Seq(
+      "com.github.jwt-scala" %% "jwt-zio-json" % Versions.jwt,
+    ),
+  )
+  .dependsOn(
+    zio          % "compile->compile;test->test",
+    jwtScalaCore % "compile->compile;test->test",
   )

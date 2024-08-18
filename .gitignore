@@ -10,6 +10,8 @@ hs_err_pid*
 /project/project/
 /zio-http/target/
 /zio-json/target/
+/jwt-scala-core/target/
+/jwt-scala-zio/target/
 
 /.idea/
 /.bsp/

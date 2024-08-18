@@ -1,5 +1,7 @@
 package one.estrondo.oidc
 
+import scala.util.Try
+
 trait Context[F[_]] {
 
   def attempt[A](a: => A): F[A] = {
@@ -23,6 +25,8 @@ trait Context[F[_]] {
   def done: F[Unit]
 
   def recover[A, B >: A](a: F[A])(f: Throwable => F[B]): F[B]
+
+  def fromTry[A](a: => Try[A]): F[A]
 
 }
 

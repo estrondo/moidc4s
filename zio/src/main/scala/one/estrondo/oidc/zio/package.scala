@@ -2,6 +2,7 @@ package one.estrondo.oidc
 
 import _root_.zio.{Ref => ZRef}
 import _root_.zio.ZIO
+import scala.util.Try
 
 package object zio {
 
@@ -28,6 +29,9 @@ package object zio {
 
     override def recover[A, B >: A](a: OZIO[A])(f: Throwable => OZIO[B]): OZIO[B] =
       a.catchAll(f)
+
+    override def fromTry[A](a: => Try[A]): OZIO[A] =
+      ZIO.fromTry(a)
   }
 
   implicit object ZIORefMaker extends Ref.Maker[OZIO] {

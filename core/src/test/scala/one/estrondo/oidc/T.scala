@@ -74,6 +74,13 @@ object T {
     override def mapError[A](a: T[A])(f: Throwable => Throwable): T[A] = new MapError(a, f)
 
     override def recover[A, B >: A](a: T[A])(f: Throwable => T[B]): T[B] = new Recover(a, f)
+
+    override def fromTry[A](a: => Try[A]): T[A] = {
+      a match {
+        case Success(value)     => new Pure(() => value)
+        case Failure(exception) => new Failed(exception)
+      }
+    }
   }
 
   implicit object RefMakerImpl extends Ref.Maker[T] {

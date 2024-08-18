@@ -15,7 +15,7 @@ object HMacFixture {
 
   def createRandomHs512(): Output = createRandom(512, JwaAlg.Hs512)
 
-  private def createRandom(length: Int, alg: JwaAlg): Output = {
+  def createRandom(length: Int, alg: JwaAlg): Output = {
     val key = Array.ofDim[Byte](length)
     Random.nextBytes(key)
 
