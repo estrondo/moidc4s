@@ -3,7 +3,7 @@ package one.estrondo.oidc.specs
 import one.estrondo.oidc.ECFixture
 import one.estrondo.oidc.HMacFixture
 import one.estrondo.oidc.Jwa
-import one.estrondo.oidc.JwaAlg
+import one.estrondo.oidc.JwaAlgorithm
 import one.estrondo.oidc.KeyDescription
 import one.estrondo.oidc.RSAFixture
 import one.estrondo.oidc.SignatureOperations
@@ -23,25 +23,24 @@ class JwaSpec extends OidcSpec {
     "read a valid EC Key." - {
 
       for (
-        (x, fn) <- Seq(
-                     JwaAlg.Es256 -> ECFixture.createRandomP256 _,
-                     JwaAlg.Es384 -> ECFixture.createRandomP384 _,
-                     JwaAlg.Es512 -> ECFixture.createRandomP512 _,
-                   )
+        input <- Seq(
+                   JwaAlgorithm.Es256,
+                   JwaAlgorithm.Es384,
+                   JwaAlgorithm.Es512,
+                 )
       ) {
-        s"${x.value}" in {
-          val (_, privateKey, jwk) = fn()
-          val algorithm            = JwaAlg.read(jwk).get
-
+        input.name in {
+          val (_, privateKey, jwk) = ECFixture.createRandom(input)
           val Success(description) = Jwa(
             "EC",
             jwk,
           )
 
           val KeyDescription.Public(publicKey) = description.key
+          val Some(algorithm)                  = description.alg
+          val data                             = createRandomData()
+          val signature                        = SignatureOperations.sign(input, data, privateKey)
 
-          val data      = createRandomData()
-          val signature = SignatureOperations.sign(algorithm, data, privateKey)
           SignatureOperations.verify(algorithm, data, signature, publicKey)
         }
       }
@@ -49,20 +48,25 @@ class JwaSpec extends OidcSpec {
 
     "read a valid RSA Key" - {
 
-      for (x <- Seq(JwaAlg.Rs256, JwaAlg.Rs384, JwaAlg.Rs512)) {
-        x.value in {
-          val (_, privateKey, jwk) = RSAFixture.createRandom(x)
-          val algorithm            = JwaAlg.read(jwk).get
-
+      for (
+        input <- Seq(
+                   JwaAlgorithm.Rs256,
+                   JwaAlgorithm.Rs384,
+                   JwaAlgorithm.Rs512,
+                 )
+      ) {
+        input.name in {
+          val (_, privateKey, jwk) = RSAFixture.createRandom(input)
           val Success(description) = Jwa(
             "RSA",
             jwk,
           )
 
           val KeyDescription.Public(publicKey) = description.key
+          val Some(algorithm)                  = description.alg
+          val data                             = createRandomData()
+          val signature                        = SignatureOperations.sign(input, data, privateKey)
 
-          val data      = createRandomData()
-          val signature = SignatureOperations.sign(algorithm, data, privateKey)
           SignatureOperations.verify(algorithm, data, signature, publicKey)
         }
       }
@@ -71,23 +75,22 @@ class JwaSpec extends OidcSpec {
 
     "read a valid Hmac* key" - {
       for {
-        (length, fn) <- Seq(
-                          "256" -> HMacFixture.createRandomHs256 _,
-                          "384" -> HMacFixture.createRandomHs384 _,
-                          "512" -> HMacFixture.createRandomHs512 _,
-                        )
+        input <- Seq(
+                   JwaAlgorithm.Hs256,
+                   JwaAlgorithm.Hs384,
+                   JwaAlgorithm.Hs512,
+                 )
       } {
-        s"Hmac$length" in {
-          val (originalKey, jwk) = fn()
-          val algorithm          = JwaAlg.read(jwk).get
+        input.name in {
+          val (originalKey, jwk) = HMacFixture.createRandom(input)
 
           val Success(description)             = Jwa("oct", jwk)
           val KeyDescription.Secret(secretKey) = description.key
+          val Some(algorithm)                  = description.alg
+          val data                             = createRandomData()
+          val signature                        = SignatureOperations.sign(algorithm, data, originalKey)
 
-          val data      = createRandomData()
-          val signature = SignatureOperations.sign(algorithm, data, originalKey)
           SignatureOperations.verify(algorithm, data, signature, secretKey)
-
         }
       }
     }

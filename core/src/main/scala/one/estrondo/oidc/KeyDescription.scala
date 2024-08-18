@@ -5,7 +5,7 @@ import javax.crypto.SecretKey
 
 case class KeyDescription(
     kid: Option[String],
-    alg: Option[JwaAlg],
+    alg: Option[JwaAlgorithm],
     key: KeyDescription.Key,
 )
 

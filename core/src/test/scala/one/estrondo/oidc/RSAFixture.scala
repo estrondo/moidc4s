@@ -11,7 +11,7 @@ object RSAFixture {
 
   type Out = (PublicKey, PrivateKey, Jwk)
 
-  def createRandom(alg: JwaAlg): Out = {
+  def createRandom(algorithm: JwaAlgorithm.Rsa): Out = {
     val keyGenerator = KeyPairGenerator.getInstance("RSA")
     val pair         = keyGenerator.generateKeyPair()
     val keyFactory   = KeyFactory.getInstance("RSA")
@@ -21,7 +21,7 @@ object RSAFixture {
       pair.getPublic,
       pair.getPrivate,
       Jwk(
-        alg = Some(alg.value),
+        alg = Some(algorithm.name),
         kid = Some(Fixtures.randomId()),
         kty = Some("RSA"),
         n = Some(encodeBase64UrlEncoded(publicKey.getModulus)),

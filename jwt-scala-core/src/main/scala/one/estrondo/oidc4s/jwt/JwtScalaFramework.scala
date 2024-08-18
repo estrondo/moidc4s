@@ -3,7 +3,7 @@ package one.estrondo.oidc4s.jwt
 import java.security.PublicKey
 import javax.crypto.SecretKey
 import one.estrondo.oidc.Context
-import one.estrondo.oidc.JwaAlg
+import one.estrondo.oidc.JwaAlgorithm
 import one.estrondo.oidc.JwtFramework
 import one.estrondo.oidc.KeyDescription
 import one.estrondo.oidc.OidcException
@@ -15,7 +15,8 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
-private[jwt] class JwtScalaFramework[J: JwtScalaJsonLibrary, F[_]: Context](options: JwtOptions) extends JwtFramework[F, J] {
+private[jwt] class JwtScalaFramework[J: JwtScalaJsonLibrary, F[_]: Context](options: JwtOptions)
+    extends JwtFramework[F, J] {
 
   override def apply(token: String, keyDescription: Option[KeyDescription]): F[J] = {
     keyDescription match {
@@ -31,24 +32,24 @@ private[jwt] class JwtScalaFramework[J: JwtScalaJsonLibrary, F[_]: Context](opti
     }
   }
 
-  private def asymmetricAlgorithm(jwaAlg: JwaAlg) = Try {
-    jwaAlg match {
-      case JwaAlg.Es256 => JwtAlgorithm.ES256
-      case JwaAlg.Rs256 => JwtAlgorithm.RS256
-      case JwaAlg.Es384 => JwtAlgorithm.ES384
-      case JwaAlg.Rs384 => JwtAlgorithm.RS384
-      case JwaAlg.Es512 => JwtAlgorithm.ES512
-      case JwaAlg.Rs512 => JwtAlgorithm.RS512
-      case other        => throw new OidcException.UnsupportedAlgorithm(other.value)
+  private def asymmetricAlgorithm(algorithm: JwaAlgorithm): Try[JwtAsymmetricAlgorithm] = Try {
+    algorithm match {
+      case JwaAlgorithm.Es256 => JwtAlgorithm.ES256
+      case JwaAlgorithm.Rs256 => JwtAlgorithm.RS256
+      case JwaAlgorithm.Es384 => JwtAlgorithm.ES384
+      case JwaAlgorithm.Rs384 => JwtAlgorithm.RS384
+      case JwaAlgorithm.Es512 => JwtAlgorithm.ES512
+      case JwaAlgorithm.Rs512 => JwtAlgorithm.RS512
+      case unsupported        => throw new OidcException.UnsupportedAlgorithm(unsupported.name)
     }
   }
 
-  private def hMacAlgorithm(jwaAlg: JwaAlg) = Try {
-    jwaAlg match {
-      case JwaAlg.Hs256 => JwtAlgorithm.HS256
-      case JwaAlg.Hs384 => JwtAlgorithm.HS384
-      case JwaAlg.Hs512 => JwtAlgorithm.HS512
-      case other        => throw new OidcException.UnsupportedAlgorithm(other.value)
+  private def hMacAlgorithm(algorithm: JwaAlgorithm): Try[JwtHmacAlgorithm] = Try {
+    algorithm match {
+      case JwaAlgorithm.Hs256 => JwtAlgorithm.HS256
+      case JwaAlgorithm.Hs384 => JwtAlgorithm.HS384
+      case JwaAlgorithm.Hs512 => JwtAlgorithm.HS512
+      case unsupported        => throw new OidcException.UnsupportedAlgorithm(unsupported.name)
     }
   }
 

@@ -2,7 +2,7 @@ package one.estrondo.oidc.specification
 
 import one.estrondo.oidc.Context
 import one.estrondo.oidc.Fixtures
-import one.estrondo.oidc.JwaAlg
+import one.estrondo.oidc.JwaAlgorithm
 import one.estrondo.oidc.JwtHeader
 import one.estrondo.oidc.KeyDescription
 import one.estrondo.oidc.KeyDescriptionFixture
@@ -19,7 +19,7 @@ class KeyFinderSpecification[F[_]: Context] extends TestUnitOps {
   val u01 = testUnit[F]("It should find the key by id and check the algorithm.")(new U {
     override def apply(): F[Assertion] = {
       val expected  = Fixtures.pickOne(keys.values.toSeq: _*)
-      val jwtHeader = JwtHeader(alg = expected.alg.map(_.value), kid = expected.kid)
+      val jwtHeader = JwtHeader(alg = expected.alg.map(_.name), kid = expected.kid)
 
       for (result <- KeyFinder(jwtHeader, keySet)) yield {
         result.value should be(expected)
@@ -52,7 +52,7 @@ class KeyFinderSpecification[F[_]: Context] extends TestUnitOps {
   val u04 = testUnit[F]("It should find the key by algorithm.")(new U {
     override def apply(): F[Assertion] = {
       val expected  = Fixtures.pickOne(keys.values.toSeq: _*)
-      val jwtHeader = JwtHeader(kid = None, alg = expected.alg.map(_.value))
+      val jwtHeader = JwtHeader(kid = None, alg = expected.alg.map(_.name))
 
       for (result <- KeyFinder(jwtHeader, keySet)) yield {
         result.value should be(expected)
@@ -63,7 +63,7 @@ class KeyFinderSpecification[F[_]: Context] extends TestUnitOps {
   val u05 = testUnit[F]("It should use the default key (in this case it is a single key set).")(new U {
 
     override lazy val keys: HashMap[String, KeyDescription] = {
-      val keyDescription = KeyDescriptionFixture.createRandom(JwaAlg.Es512)
+      val keyDescription = KeyDescriptionFixture.createRandom(JwaAlgorithm.Es512)
       HashMap(keyDescription.kid.get -> keyDescription)
     }
 
@@ -79,7 +79,7 @@ class KeyFinderSpecification[F[_]: Context] extends TestUnitOps {
 
   // noinspection TypeAnnotation
   abstract class U extends TestUnitContext[F] {
-    lazy val keys = HashMap((for (jwaAlg <- JwaAlg.all.toSeq) yield {
+    lazy val keys = HashMap((for (jwaAlg <- JwaAlgorithm.all.toSeq) yield {
       val keyDescription = KeyDescriptionFixture.createRandom(jwaAlg)
       keyDescription.kid.get -> keyDescription
     }): _*)

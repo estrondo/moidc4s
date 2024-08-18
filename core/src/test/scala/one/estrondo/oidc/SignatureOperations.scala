@@ -10,34 +10,50 @@ import org.scalatest.matchers.should.Matchers._
 
 object SignatureOperations {
 
-  def verify(alg: JwaAlg, data: Array[Byte], expected: Array[Byte], key: Key): Assertion = {
-    alg.alg match {
-      case Some(JwaAlg.Mac(value))              =>
-        val mac  = Mac.getInstance(value)
-        mac.init(key)
-        val hash = mac.doFinal(data)
-        hash should be(expected)
-      case Some(JwaAlg.DigitalSignature(value)) =>
-        val signature = Signature.getInstance(value)
-        signature.initVerify(key.asInstanceOf[PublicKey])
-        signature.update(data)
-        signature.verify(expected) should be(true)
-      case _                                    => ???
+  def verify(algorithm: JwaAlgorithm, data: Array[Byte], expected: Array[Byte], key: Key): Assertion = {
+
+    def asymmetric(fullName: String) = {
+      val signature = Signature.getInstance(fullName)
+      signature.initVerify(key.asInstanceOf[PublicKey])
+      signature.update(data)
+      signature.verify(expected) should be(true)
+    }
+
+    def symmetric(fullName: String) = {
+      val mac  = Mac.getInstance(fullName)
+      mac.init(key)
+      val hash = mac.doFinal(data)
+      hash should be(expected)
+    }
+
+    algorithm match {
+      case JwaAlgorithm.Hmac(_, fullName, _)  => symmetric(fullName)
+      case JwaAlgorithm.Rsa(_, fullName)      => asymmetric(fullName)
+      case JwaAlgorithm.Ec(_, fullName, _, _) => asymmetric(fullName)
+      case _                                  => ???
     }
   }
 
-  def sign(alg: JwaAlg, data: Array[Byte], key: Key): Array[Byte] = {
-    alg.alg match {
-      case Some(JwaAlg.Mac(value))              =>
-        val mac = Mac.getInstance(value)
-        mac.init(key)
-        mac.doFinal(data)
-      case Some(JwaAlg.DigitalSignature(value)) =>
-        val signature = Signature.getInstance(value)
-        signature.initSign(key.asInstanceOf[PrivateKey])
-        signature.update(data)
-        signature.sign()
-      case _                                    => ???
+  def sign(algorithm: JwaAlgorithm, data: Array[Byte], key: Key): Array[Byte] = {
+
+    def symmetric(fullName: String) = {
+      val mac = Mac.getInstance(fullName)
+      mac.init(key)
+      mac.doFinal(data)
+    }
+
+    def asymmetric(fullName: String) = {
+      val signature = Signature.getInstance(fullName)
+      signature.initSign(key.asInstanceOf[PrivateKey])
+      signature.update(data)
+      signature.sign()
+    }
+
+    algorithm match {
+      case JwaAlgorithm.Hmac(_, fullName, _)  => symmetric(fullName)
+      case JwaAlgorithm.Rsa(_, fullName)      => asymmetric(fullName)
+      case JwaAlgorithm.Ec(_, fullName, _, _) => asymmetric(fullName)
+      case _                                  => ???
     }
   }
 }

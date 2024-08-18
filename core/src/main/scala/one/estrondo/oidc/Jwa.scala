@@ -12,22 +12,18 @@ import scala.util.Try
 
 private[oidc] object Jwa {
 
-  val Ec  = "EC"
-  val RSA = "RSA"
-  val Oct = "oct"
-
   def apply(kty: String, jwk: Jwk): Try[KeyDescription] = Try {
     if (jwk.use.exists(_ != "sig")) {
       throw new OidcException.InvalidJwk(s"The 'use' parameter should be 'sig' not ${jwk.use.get}.")
     }
 
-    val alg = JwaAlg.read(jwk)
+    val alg = JwaAlgorithm.extract(jwk)
 
     val key = kty match {
-      case Ec  => ec(jwk)
-      case RSA => rsa(jwk)
-      case Oct => oct(jwk, alg)
-      case _   => throw new OidcException.InvalidJwk(s"Unsupported kty: $kty.")
+      case "EC"  => ec(jwk)
+      case "RSA" => rsa(jwk)
+      case "oct" => oct(jwk, alg)
+      case _     => throw new OidcException.InvalidJwk(s"Unsupported kty: $kty.")
     }
 
     KeyDescription(
@@ -72,11 +68,11 @@ private[oidc] object Jwa {
     KeyFactory.getInstance(algorithm)
   }
 
-  private def oct(jwk: Jwk, alg: Option[JwaAlg]): KeyDescription.Key = {
-    alg match {
-      case Some(JwaAlg(_, Some(JwaAlg.Mac(algorithm)))) =>
+  private def oct(jwk: Jwk, algorithm: Option[JwaAlgorithm]): KeyDescription.Key = {
+    algorithm match {
+      case Some(JwaAlgorithm.Hmac(_, fullName, _)) =>
         val k             = B64.decodeUrlEncoded("k", jwk.k)
-        val secretKeySpec = new SecretKeySpec(k, algorithm)
+        val secretKeySpec = new SecretKeySpec(k, fullName)
         KeyDescription.Secret(secretKeySpec)
 
       case _ =>
