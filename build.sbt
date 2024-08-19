@@ -15,7 +15,10 @@ val Versions = new {
   val zioHttp        = "3.0.0-RC9"
   val testContainers = "0.41.4"
   val zioJson        = "0.7.2"
-  val jwt            = "10.0.1"
+  val jwtScala       = "10.0.1"
+  val catsEffect     = "3.5.4"
+  val http4s         = "0.23.27"
+  val circe          = "0.14.9"
 }
 
 inThisBuild(
@@ -29,7 +32,7 @@ inThisBuild(
 val crossScalacOptions = Def.task {
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((3, _))  => Seq("-source:3.0-migration", "-Wunused:all", "-explain")
-    case Some((2, 12)) => Seq("-Ywarn-unused")
+    case Some((2, 12)) => Seq("-Ywarn-unused", "-Ypartial-unification")
     case Some((2, 13)) => Seq("-Wunused")
     case _             => Seq.empty
   }
@@ -49,6 +52,9 @@ lazy val root = (project in file("."))
     zioJson,
     jwtScalaCore,
     jwtScalaZio,
+    catsEffect,
+    http4s,
+    circe,
   )
 
 lazy val core = (project in file("core"))
@@ -120,7 +126,7 @@ lazy val jwtScalaCore = (project in file("jwt-scala-core"))
     scalacOptions ++= crossScalacOptions.value,
     isSnapshot         := Build.isSnapshot,
     libraryDependencies ++= Seq(
-      "com.github.jwt-scala" %% "jwt-core" % Versions.jwt,
+      "com.github.jwt-scala" %% "jwt-core" % Versions.jwtScala,
     ),
   )
   .dependsOn(
@@ -133,10 +139,69 @@ lazy val jwtScalaZio = (project in file("jwt-scala-zio"))
     crossScalaVersions := supportedScalaVersions,
     scalacOptions ++= crossScalacOptions.value,
     libraryDependencies ++= Seq(
-      "com.github.jwt-scala" %% "jwt-zio-json" % Versions.jwt,
+      "com.github.jwt-scala" %% "jwt-zio-json" % Versions.jwtScala,
     ),
   )
   .dependsOn(
     zio          % "compile->compile;test->test",
+    jwtScalaCore % "compile->compile;test->test",
+  )
+
+lazy val catsEffect = (project in file("cats-effect"))
+  .settings(
+    name               := "oidc4s-cats-effect",
+    crossScalaVersions := supportedScalaVersions,
+    isSnapshot         := Build.isSnapshot,
+    scalacOptions ++= crossScalacOptions.value,
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-effect"                   % Versions.catsEffect,
+      "org.typelevel" %% "cats-effect-testing-scalatest" % "1.5.0" % Test,
+    ),
+  )
+  .dependsOn(
+    core % "compile->compile;test->test",
+  )
+
+lazy val http4s = (project in file("http4s"))
+  .settings(
+    name               := "oidc4s-http4s",
+    crossScalaVersions := supportedScalaVersions,
+    isSnapshot         := Build.isSnapshot,
+    scalacOptions ++= crossScalacOptions.value,
+    libraryDependencies ++= Seq(
+      "org.http4s" %% "http4s-client" % Versions.http4s,
+    ),
+  )
+  .dependsOn(
+    catsEffect % "compile->compile;test->test",
+  )
+
+lazy val circe = (project in file("circe"))
+  .settings(
+    name               := "oidc4s-circe",
+    crossScalaVersions := supportedScalaVersions,
+    isSnapshot         := Build.isSnapshot,
+    scalacOptions ++= crossScalacOptions.value,
+    libraryDependencies ++= Seq(
+      "io.circe" %% "circe-core"    % Versions.circe,
+      "io.circe" %% "circe-generic" % Versions.circe,
+      "io.circe" %% "circe-parser"  % Versions.circe,
+    ),
+  )
+  .dependsOn(
+    catsEffect % "compile->compile;test->test",
+  )
+
+lazy val jwtCirce = (project in file("jwt-scala-circe"))
+  .settings(
+    name               := "oidc4s-jwt-scala-circe",
+    crossScalaVersions := supportedScalaVersions,
+    isSnapshot         := Build.isSnapshot,
+    scalacOptions ++= crossScalacOptions.value,
+    libraryDependencies ++= Seq(
+      "com.github.jwt-scala" %% "jwt-circe" % Versions.jwtScala,
+    ),
+  )
+  .dependsOn(
     jwtScalaCore % "compile->compile;test->test",
   )

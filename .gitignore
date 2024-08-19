@@ -12,6 +12,10 @@ hs_err_pid*
 /zio-json/target/
 /jwt-scala-core/target/
 /jwt-scala-zio/target/
+/cats-effect/target/
+/http4s/target/
+/circe/target/
+/jwt-scala-circe/target/
 
 /.idea/
 /.bsp/

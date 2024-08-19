@@ -27,7 +27,7 @@ object HttpTransporterSpec extends ZIOSpecDefault {
         assertTrue(response == Transporter.Ok("success!"))
       }
     },
-    test("It should respond with an rrror when the request returns 4xx.") {
+    test("It should respond with an error when the request returns 4xx.") {
       for {
         container <- ZIO.service[WireMockContainer]
         response  <- HttpTransporter.get(container.getUrl("/4xx"))
