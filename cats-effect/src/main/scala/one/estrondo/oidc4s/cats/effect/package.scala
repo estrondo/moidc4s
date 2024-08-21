@@ -2,8 +2,8 @@ package one.estrondo.oidc4s.cats
 
 import cats.effect.IO
 import cats.effect.std.AtomicCell
-import one.estrondo.oidc.Context
-import one.estrondo.oidc.Ref
+import one.estrondo.oidc4s.Context
+import one.estrondo.oidc4s.Ref
 import scala.util.Try
 
 package object effect {

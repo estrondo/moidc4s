@@ -1,10 +1,10 @@
 package one.estrondo.oidc4s.cats.effect
 
 import cats.effect.IO
-import one.estrondo.oidc.specification.CacheSpecification
-import one.estrondo.oidc.specification.HeaderExtractorSpecification
-import one.estrondo.oidc.specification.JwkSetSourceSpecification
-import one.estrondo.oidc.specification.KeyFinderSpecification
+import one.estrondo.oidc4s.specification.CacheSpecification
+import one.estrondo.oidc4s.specification.HeaderExtractorSpecification
+import one.estrondo.oidc4s.specification.JwkSetSourceSpecification
+import one.estrondo.oidc4s.specification.KeyFinderSpecification
 
 class Specs extends Oidc4sSpec {
 

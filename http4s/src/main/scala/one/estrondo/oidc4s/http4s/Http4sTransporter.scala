@@ -1,7 +1,7 @@
 package one.estrondo.oidc4s.http4s
 
 import _root_.cats.effect.IO
-import one.estrondo.oidc.Transporter
+import one.estrondo.oidc4s.Transporter
 import org.http4s.Response
 import org.http4s.Status
 import org.http4s.client.Client

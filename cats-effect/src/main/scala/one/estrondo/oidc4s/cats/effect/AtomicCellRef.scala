@@ -2,7 +2,7 @@ package one.estrondo.oidc4s.cats.effect
 
 import cats.effect.IO
 import cats.effect.std.AtomicCell
-import one.estrondo.oidc.Ref
+import one.estrondo.oidc4s.Ref
 
 class AtomicCellRef[A](atomicCell: AtomicCell[IO, A]) extends Ref[IO, A] {
 

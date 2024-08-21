@@ -1,7 +1,7 @@
 package one.estrondo.oidc4s.zio.json
 
-import one.estrondo.oidc.JwkSet
-import one.estrondo.oidc.zio.ZioOidcSpec
+import one.estrondo.oidc4s.JwkSet
+import one.estrondo.oidc4s.zio.ZioOidcSpec
 import zio.Scope
 import zio.stream.ZStream
 import zio.test.Spec

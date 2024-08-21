@@ -2,11 +2,11 @@ package one.estrondo.oidc4s.jwt
 
 import java.security.PublicKey
 import javax.crypto.SecretKey
-import one.estrondo.oidc.Context
-import one.estrondo.oidc.JwaAlgorithm
-import one.estrondo.oidc.JwtFramework
-import one.estrondo.oidc.KeyDescription
-import one.estrondo.oidc.OidcException
+import one.estrondo.oidc4s.Context
+import one.estrondo.oidc4s.JwaAlgorithm
+import one.estrondo.oidc4s.JwtFramework
+import one.estrondo.oidc4s.KeyDescription
+import one.estrondo.oidc4s.OidcException
 import pdi.jwt.JwtAlgorithm
 import pdi.jwt.JwtOptions
 import pdi.jwt.algorithms.JwtAsymmetricAlgorithm

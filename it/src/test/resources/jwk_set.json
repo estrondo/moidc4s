@@ -1,0 +1,26 @@
+{
+  "request": {
+    "url": "/jwk_set",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-type": "application/json"
+    },
+    "jsonBody": {
+      "keys": [
+        {
+          "typ": "JWT",
+          "kid": "00998877665544332211",
+          "alg": "HS256",
+          "kty": "oct",
+          "k": "YSBzdXBlciBzZWNyZXQgcGFzc3dvcmQ="
+        }
+      ]
+    },
+    "transformers": [
+      "response-template"
+    ]
+  }
+}

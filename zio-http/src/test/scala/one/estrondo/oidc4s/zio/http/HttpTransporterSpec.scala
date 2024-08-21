@@ -1,8 +1,8 @@
 package one.estrondo.oidc4s.zio.http
 
 import com.dimafeng.testcontainers.WireMockContainer
-import one.estrondo.oidc.Transporter
-import one.estrondo.oidc.zio.ContainerLayer
+import one.estrondo.oidc4s.Transporter
+import one.estrondo.oidc4s.zio.ContainerLayer
 import zio.Runtime
 import zio.Scope
 import zio.ZIO
@@ -22,7 +22,7 @@ object HttpTransporterSpec extends ZIOSpecDefault {
     test("It should respond with Ok when the request returns 2xx.") {
       for {
         container <- ZIO.service[WireMockContainer]
-        response  <- HttpTransporter.get(container.getUrl("/2xx"))
+        response  <- ZIO.serviceWithZIO[ZIOHttpTransporter](_.get(container.getUrl("/2xx")))
       } yield {
         assertTrue(response == Transporter.Ok("success!"))
       }
@@ -30,7 +30,7 @@ object HttpTransporterSpec extends ZIOSpecDefault {
     test("It should respond with an error when the request returns 4xx.") {
       for {
         container <- ZIO.service[WireMockContainer]
-        response  <- HttpTransporter.get(container.getUrl("/4xx"))
+        response  <- ZIO.serviceWithZIO[ZIOHttpTransporter](_.get(container.getUrl("/4xx")))
       } yield {
         val failed = response.asInstanceOf[Transporter.Failed]
         assertTrue(
@@ -41,7 +41,7 @@ object HttpTransporterSpec extends ZIOSpecDefault {
     test("It should respond with an error when the request returns 5xx.") {
       for {
         container <- ZIO.service[WireMockContainer]
-        response  <- HttpTransporter.get(container.getUrl("/5xx"))
+        response  <- ZIO.serviceWithZIO[ZIOHttpTransporter](_.get(container.getUrl("/5xx")))
       } yield {
         val failed = response.asInstanceOf[Transporter.Failed]
         assertTrue(
@@ -60,5 +60,13 @@ object HttpTransporterSpec extends ZIOSpecDefault {
     },
     Client.default,
     Scope.default,
+    ZLayer {
+      for {
+        client <- ZIO.service[Client]
+        scope  <- ZIO.service[Scope]
+      } yield {
+        transporterFrom(ZLayer.succeed(client) ++ ZLayer.succeed(scope))
+      }
+    },
   ) @@ TestAspect.sequential
 }

@@ -1,8 +1,8 @@
 package one.estrondo.oidc4s.jwt.zio
 
-import one.estrondo.oid4cs.jwt.specification.JwtScalaFrameworkSpecification
-import one.estrondo.oidc.zio._
-import one.estrondo.oidc.zio.ZioOidcSpec
+import one.estrondo.oidc4s.jwt.specification.JwtScalaFrameworkSpecification
+import one.estrondo.oidc4s.zio._
+import one.estrondo.oidc4s.zio.ZioOidcSpec
 import zio.Scope
 import zio.json.ast.Json
 import zio.test.Spec

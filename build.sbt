@@ -38,6 +38,12 @@ val crossScalacOptions = Def.task {
   }
 }
 
+val commonSettings: Seq[Def.SettingsDefinition] = Seq(
+  crossScalaVersions := supportedScalaVersions,
+  isSnapshot         := Build.isSnapshot,
+  scalacOptions ++= crossScalacOptions.value,
+)
+
 lazy val root = (project in file("."))
   .settings(
     name               := "oidc4",
@@ -55,24 +61,23 @@ lazy val root = (project in file("."))
     catsEffect,
     http4s,
     circe,
+    jwtScalaCirce,
   )
 
 lazy val core = (project in file("core"))
+  .settings(commonSettings *)
   .settings(
-    name                                   := "oidc4s-core",
-    crossScalaVersions                     := supportedScalaVersions,
-    isSnapshot                             := Build.isSnapshot,
-    scalacOptions ++= crossScalacOptions.value,
-    libraryDependencies += "org.scalatest" %% "scalatest" % Versions.scalaTest % Test,
-    libraryDependencies += "org.scalamock" %% "scalamock" % Versions.scalaMock % Test,
+    name := "oidc4s-core",
+    libraryDependencies ++= Seq(
+      "org.scalatest" %% "scalatest" % Versions.scalaTest % Test,
+      "org.scalamock" %% "scalamock" % Versions.scalaMock % Test,
+    ),
   )
 
 lazy val zio = (project in file("zio"))
+  .settings(commonSettings *)
   .settings(
-    name               := "oidc4s-zio",
-    crossScalaVersions := supportedScalaVersions,
-    isSnapshot         := Build.isSnapshot,
-    scalacOptions ++= crossScalacOptions.value,
+    name := "oidc4s-zio",
     libraryDependencies ++= Seq(
       "dev.zio"      %% "zio"                       % Versions.zio,
       "dev.zio"      %% "zio-test"                  % Versions.zio            % Test,
@@ -85,12 +90,10 @@ lazy val zio = (project in file("zio"))
   )
 
 lazy val zioHttp = (project in file("zio-http"))
+  .settings(commonSettings *)
   .settings(
     name                     := "oidc4s-zio-http",
-    crossScalaVersions       := supportedScalaVersions,
-    isSnapshot               := Build.isSnapshot,
     Test / parallelExecution := false,
-    scalacOptions ++= crossScalacOptions.value,
     libraryDependencies ++= Seq(
       "dev.zio"      %% "zio-http"                      % Versions.zioHttp,
       "com.dimafeng" %% "testcontainers-scala-wiremock" % Versions.testContainers % Test,
@@ -105,11 +108,9 @@ lazy val zioHttp = (project in file("zio-http"))
   )
 
 lazy val zioJson = (project in file("zio-json"))
+  .settings(commonSettings *)
   .settings(
-    name               := "oidc4s-zio-json",
-    crossScalaVersions := supportedScalaVersions,
-    isSnapshot         := Build.isSnapshot,
-    scalacOptions ++= crossScalacOptions.value,
+    name := "oidc4s-zio-json",
     libraryDependencies ++= Seq(
       "dev.zio" %% "zio-json" % Versions.zioJson,
     ),
@@ -120,11 +121,9 @@ lazy val zioJson = (project in file("zio-json"))
   )
 
 lazy val jwtScalaCore = (project in file("jwt-scala-core"))
+  .settings(commonSettings *)
   .settings(
-    name               := "oidc4s-jwt-scala-core",
-    crossScalaVersions := supportedScalaVersions,
-    scalacOptions ++= crossScalacOptions.value,
-    isSnapshot         := Build.isSnapshot,
+    name := "oidc4s-jwt-scala-core",
     libraryDependencies ++= Seq(
       "com.github.jwt-scala" %% "jwt-core" % Versions.jwtScala,
     ),
@@ -134,10 +133,9 @@ lazy val jwtScalaCore = (project in file("jwt-scala-core"))
   )
 
 lazy val jwtScalaZio = (project in file("jwt-scala-zio"))
+  .settings(commonSettings *)
   .settings(
-    name               := "oidc4s-jwt-scala-zio",
-    crossScalaVersions := supportedScalaVersions,
-    scalacOptions ++= crossScalacOptions.value,
+    name := "oidc4s-jwt-scala-zio",
     libraryDependencies ++= Seq(
       "com.github.jwt-scala" %% "jwt-zio-json" % Versions.jwtScala,
     ),
@@ -148,11 +146,9 @@ lazy val jwtScalaZio = (project in file("jwt-scala-zio"))
   )
 
 lazy val catsEffect = (project in file("cats-effect"))
+  .settings(commonSettings *)
   .settings(
-    name               := "oidc4s-cats-effect",
-    crossScalaVersions := supportedScalaVersions,
-    isSnapshot         := Build.isSnapshot,
-    scalacOptions ++= crossScalacOptions.value,
+    name := "oidc4s-cats-effect",
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect"                   % Versions.catsEffect,
       "org.typelevel" %% "cats-effect-testing-scalatest" % "1.5.0" % Test,
@@ -163,11 +159,9 @@ lazy val catsEffect = (project in file("cats-effect"))
   )
 
 lazy val http4s = (project in file("http4s"))
+  .settings(commonSettings *)
   .settings(
-    name               := "oidc4s-http4s",
-    crossScalaVersions := supportedScalaVersions,
-    isSnapshot         := Build.isSnapshot,
-    scalacOptions ++= crossScalacOptions.value,
+    name := "oidc4s-http4s",
     libraryDependencies ++= Seq(
       "org.http4s" %% "http4s-client" % Versions.http4s,
     ),
@@ -177,11 +171,9 @@ lazy val http4s = (project in file("http4s"))
   )
 
 lazy val circe = (project in file("circe"))
+  .settings(commonSettings *)
   .settings(
-    name               := "oidc4s-circe",
-    crossScalaVersions := supportedScalaVersions,
-    isSnapshot         := Build.isSnapshot,
-    scalacOptions ++= crossScalacOptions.value,
+    name := "oidc4s-circe",
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-core"    % Versions.circe,
       "io.circe" %% "circe-generic" % Versions.circe,
@@ -192,16 +184,34 @@ lazy val circe = (project in file("circe"))
     catsEffect % "compile->compile;test->test",
   )
 
-lazy val jwtCirce = (project in file("jwt-scala-circe"))
+lazy val jwtScalaCirce = (project in file("jwt-scala-circe"))
+  .settings(commonSettings *)
   .settings(
-    name               := "oidc4s-jwt-scala-circe",
-    crossScalaVersions := supportedScalaVersions,
-    isSnapshot         := Build.isSnapshot,
-    scalacOptions ++= crossScalacOptions.value,
+    name := "oidc4s-jwt-scala-circe",
     libraryDependencies ++= Seq(
       "com.github.jwt-scala" %% "jwt-circe" % Versions.jwtScala,
     ),
   )
   .dependsOn(
     jwtScalaCore % "compile->compile;test->test",
+  )
+
+lazy val it = (project in file("it"))
+  .settings(commonSettings *)
+  .settings(
+    name           := "integration",
+    publish / skip := true,
+    Test / parallelExecution := false,
+  )
+  .dependsOn(
+    Seq(
+      core,
+      zio,
+      jwtScalaZio,
+      jwtScalaCirce,
+      circe,
+      zioJson,
+      zioHttp,
+      http4s,
+    ).map(_ % "compile->compile;test->test"): _*,
   )

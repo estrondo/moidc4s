@@ -4,11 +4,11 @@ import _root_.cats.effect.IO
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.parser.decode
-import one.estrondo.oidc.JsonFramework
-import one.estrondo.oidc.Jwk
-import one.estrondo.oidc.JwkSet
-import one.estrondo.oidc.JwtHeader
-import one.estrondo.oidc.Metadata
+import one.estrondo.oidc4s.JsonFramework
+import one.estrondo.oidc4s.Jwk
+import one.estrondo.oidc4s.JwkSet
+import one.estrondo.oidc4s.JwtHeader
+import one.estrondo.oidc4s.Metadata
 
 package object circe {
 

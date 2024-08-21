@@ -16,6 +16,7 @@ hs_err_pid*
 /http4s/target/
 /circe/target/
 /jwt-scala-circe/target/
+/it/target/
 
 /.idea/
 /.bsp/

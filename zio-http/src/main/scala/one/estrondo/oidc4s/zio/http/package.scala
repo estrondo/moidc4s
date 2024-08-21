@@ -1,9 +1,12 @@
 package one.estrondo.oidc4s.zio
 
+import scala.language.implicitConversions
 import zio.Scope
-import zio.ZIO
+import zio.TaskLayer
 import zio.http.Client
 
 package object http {
-  type HttpZIO[A] = ZIO[Client with Scope, Throwable, A]
+
+  implicit def transporterFrom(implicit layer: TaskLayer[Client with Scope]): ZIOHttpTransporter =
+    new ZIOHttpTransporter(layer)
 }

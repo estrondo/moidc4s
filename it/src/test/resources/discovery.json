@@ -1,0 +1,21 @@
+{
+  "request": {
+    "url": "/discovery",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-type": "text/plain;string=cool"
+    },
+    "jsonBody": {
+      "other_field": {
+        "with": "Any value!"
+      },
+      "jwks_uri": "{{request.baseUrl}}/jwk_set"
+    },
+    "transformers": [
+      "response-template"
+    ]
+  }
+}
