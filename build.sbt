@@ -46,7 +46,7 @@ val commonSettings: Seq[Def.SettingsDefinition] = Seq(
 
 lazy val root = (project in file("."))
   .settings(
-    name               := "oidc4",
+    name               := "moidc4s",
     crossScalaVersions := Nil,
     publish / skip     := true,
   )
@@ -67,7 +67,7 @@ lazy val root = (project in file("."))
 lazy val core = (project in file("core"))
   .settings(commonSettings *)
   .settings(
-    name := "oidc4s-core",
+    name := "moidc4s-core",
     libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % Versions.scalaTest % Test,
       "org.scalamock" %% "scalamock" % Versions.scalaMock % Test,
@@ -77,7 +77,7 @@ lazy val core = (project in file("core"))
 lazy val zio = (project in file("zio"))
   .settings(commonSettings *)
   .settings(
-    name := "oidc4s-zio",
+    name := "moidc4s-zio",
     libraryDependencies ++= Seq(
       "dev.zio"      %% "zio"                       % Versions.zio,
       "dev.zio"      %% "zio-test"                  % Versions.zio            % Test,
@@ -92,7 +92,7 @@ lazy val zio = (project in file("zio"))
 lazy val zioHttp = (project in file("zio-http"))
   .settings(commonSettings *)
   .settings(
-    name                     := "oidc4s-zio-http",
+    name                     := "moidc4s-zio-http",
     Test / parallelExecution := false,
     libraryDependencies ++= Seq(
       "dev.zio"      %% "zio-http"                      % Versions.zioHttp,
@@ -110,7 +110,7 @@ lazy val zioHttp = (project in file("zio-http"))
 lazy val zioJson = (project in file("zio-json"))
   .settings(commonSettings *)
   .settings(
-    name := "oidc4s-zio-json",
+    name := "moidc4s-zio-json",
     libraryDependencies ++= Seq(
       "dev.zio" %% "zio-json" % Versions.zioJson,
     ),
@@ -123,7 +123,7 @@ lazy val zioJson = (project in file("zio-json"))
 lazy val jwtScalaCore = (project in file("jwt-scala-core"))
   .settings(commonSettings *)
   .settings(
-    name := "oidc4s-jwt-scala-core",
+    name := "moidc4s-jwt-scala-core",
     libraryDependencies ++= Seq(
       "com.github.jwt-scala" %% "jwt-core" % Versions.jwtScala,
     ),
@@ -135,7 +135,7 @@ lazy val jwtScalaCore = (project in file("jwt-scala-core"))
 lazy val jwtScalaZio = (project in file("jwt-scala-zio"))
   .settings(commonSettings *)
   .settings(
-    name := "oidc4s-jwt-scala-zio",
+    name := "moidc4s-jwt-scala-zio",
     libraryDependencies ++= Seq(
       "com.github.jwt-scala" %% "jwt-zio-json" % Versions.jwtScala,
     ),
@@ -148,7 +148,7 @@ lazy val jwtScalaZio = (project in file("jwt-scala-zio"))
 lazy val catsEffect = (project in file("cats-effect"))
   .settings(commonSettings *)
   .settings(
-    name := "oidc4s-cats-effect",
+    name := "moidc4s-cats-effect",
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect"                   % Versions.catsEffect,
       "org.typelevel" %% "cats-effect-testing-scalatest" % "1.5.0" % Test,
@@ -161,7 +161,7 @@ lazy val catsEffect = (project in file("cats-effect"))
 lazy val http4s = (project in file("http4s"))
   .settings(commonSettings *)
   .settings(
-    name := "oidc4s-http4s",
+    name := "moidc4s-http4s",
     libraryDependencies ++= Seq(
       "org.http4s" %% "http4s-client" % Versions.http4s,
     ),
@@ -173,7 +173,7 @@ lazy val http4s = (project in file("http4s"))
 lazy val circe = (project in file("circe"))
   .settings(commonSettings *)
   .settings(
-    name := "oidc4s-circe",
+    name := "moidc4s-circe",
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-core"    % Versions.circe,
       "io.circe" %% "circe-generic" % Versions.circe,
@@ -187,7 +187,7 @@ lazy val circe = (project in file("circe"))
 lazy val jwtScalaCirce = (project in file("jwt-scala-circe"))
   .settings(commonSettings *)
   .settings(
-    name := "oidc4s-jwt-scala-circe",
+    name := "moidc4s-jwt-scala-circe",
     libraryDependencies ++= Seq(
       "com.github.jwt-scala" %% "jwt-circe" % Versions.jwtScala,
     ),
