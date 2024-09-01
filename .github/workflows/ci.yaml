@@ -13,4 +13,4 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: sbt
-      - run: sbt coverage +test coverageReport coverageAggregate
+      - run: sbt coverage Test/compile test coverageReport coverageAggregate
