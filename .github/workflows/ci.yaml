@@ -1,5 +1,5 @@
 name: CI for Module OpenId Connect for Scala.
-run-name: ${{ github.actor }} is running this Github Action.
+run-name: Testing.
 
 on: [ push, pull_request ]
 
@@ -13,4 +13,4 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: sbt
-      - run: sbt coverage +Test/compile +test +coverageReport +coverageAggregate
+      - run: sbt coverage +Test/compile +test +it/test +coverageReport +coverageAggregate
