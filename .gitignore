@@ -17,8 +17,10 @@ hs_err_pid*
 /circe/target/
 /jwt-scala-circe/target/
 /it/target/
+/zio/target/
 
 /.idea/
 /.bsp/
 /.attach_pid*
-/zio/target/
+/.metals/
+/.vscode/

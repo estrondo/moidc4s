@@ -1,2 +1,3 @@
 # moidc4s
-Incipient Open Id Connect implementation for Scala
+
+Modular Open Id Connect implementation for Scala.
