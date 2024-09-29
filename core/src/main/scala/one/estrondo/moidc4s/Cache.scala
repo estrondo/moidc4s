@@ -2,7 +2,7 @@ package one.estrondo.moidc4s
 
 import syntax._
 
-private[moidc4s] class Cache[F[_], A] private(ref: Ref[F, Cache.Outcome[A]], lookup: Lookup[F, A]) {
+private[moidc4s] class Cache[F[_], A] private (ref: Ref[F, Cache.Outcome[A]], lookup: Lookup[F, A]) {
 
   def get(implicit ctx: Context[F]): F[A] = {
     for {

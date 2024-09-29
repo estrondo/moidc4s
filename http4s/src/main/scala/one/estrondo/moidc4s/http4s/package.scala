@@ -6,6 +6,6 @@ import scala.language.implicitConversions
 
 package object http4s {
 
-  implicit def transporter(client: Client[IO]): Http4sTransporter =
+  implicit def transporter(implicit client: Client[IO]): Http4sTransporter =
     new Http4sTransporter(client)
 }

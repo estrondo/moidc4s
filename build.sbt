@@ -1,3 +1,5 @@
+import scala.language.postfixOps
+
 val scala213 = "2.13.14"
 val scala3   = "3.4.2"
 val scala12  = "2.12.19"
@@ -17,8 +19,10 @@ val Versions = new {
   val zioJson        = "0.7.2"
   val jwtScala       = "10.0.1"
   val catsEffect     = "3.5.4"
+  val weaverCats     = "0.8.4"
   val http4s         = "0.23.27"
   val circe          = "0.14.9"
+  val nettyHttp4s    = "0.5.18"
 }
 
 inThisBuild(
@@ -150,8 +154,10 @@ lazy val catsEffect = (project in file("cats-effect"))
   .settings(
     name := "moidc4s-cats-effect",
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-effect"                   % Versions.catsEffect,
-      "org.typelevel" %% "cats-effect-testing-scalatest" % "1.5.0" % Test,
+      "org.typelevel"       %% "cats-effect"                   % Versions.catsEffect,
+      "org.typelevel"       %% "cats-effect-testing-scalatest" % "1.5.0"                 % Test,
+      "com.disneystreaming" %% "weaver-cats"                   % Versions.weaverCats     % Test,
+      "com.dimafeng"        %% "testcontainers-scala-core"     % Versions.testContainers % Test,
     ),
   )
   .dependsOn(
@@ -199,14 +205,18 @@ lazy val jwtScalaCirce = (project in file("jwt-scala-circe"))
 lazy val it = (project in file("it"))
   .settings(commonSettings *)
   .settings(
-    name           := "integration",
-    publish / skip := true,
+    name                     := "integration",
+    publish / skip           := true,
     Test / parallelExecution := false,
+    libraryDependencies ++= Seq(
+      "org.http4s" %% "http4s-netty-client" % Versions.nettyHttp4s,
+    ),
   )
   .dependsOn(
     Seq(
       core,
       zio,
+      catsEffect,
       jwtScalaZio,
       jwtScalaCirce,
       circe,

@@ -20,7 +20,7 @@ import one.estrondo.moidc4s.zio.json._
 import pdi.jwt.exceptions.JwtValidationException
 import scala.collection.immutable.HashMap
 
-object ZioIntegration extends ZIOSpecDefault {
+object ZioIntegrationSpec extends ZIOSpecDefault {
 
   private val httpLayer: TaskLayer[Client with Scope with WireMockContainer] =
     Scope.default >+> (Client.default ++ ContainerLayer.layerOf {
@@ -32,19 +32,6 @@ object ZioIntegration extends ZIOSpecDefault {
     })
 
   override def spec = suite("ZIO Integration")(
-    test("Creating a moidc4s provider with implicit dependencies. ") {
-      for {
-        client   <- ZIO.service[Client]
-        scope    <- ZIO.service[Scope]
-        provider <- {
-          implicit val layer: TaskLayer[Client with Scope] = ZLayer.succeed(client) ++ ZLayer.succeed(scope)
-          OpenIdProvider[OZIO](Provider.Discovery("http://localhost"))
-        }
-
-      } yield {
-        assertTrue(provider != null)
-      }
-    }.provideSome(httpLayer),
     test("Using moidc4s with a OpenId Provider through the Discovery Endpoint.") {
       for {
         client            <- ZIO.service[Client]

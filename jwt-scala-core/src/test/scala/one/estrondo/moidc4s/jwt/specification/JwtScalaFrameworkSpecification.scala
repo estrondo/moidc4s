@@ -12,9 +12,9 @@ import one.estrondo.moidc4s.RSAFixture
 import one.estrondo.moidc4s.TestUnit
 import one.estrondo.moidc4s.TestUnitContext
 import one.estrondo.moidc4s.TestUnitOps
-import one.estrondo.moidc4s.syntax._
 import one.estrondo.moidc4s.jwt.Jwt
 import one.estrondo.moidc4s.jwt.JwtScalaJsonLibrary
+import one.estrondo.moidc4s.syntax._
 import org.scalatest.Assertion
 import pdi.jwt.JwtAlgorithm
 import pdi.jwt.JwtClaim
