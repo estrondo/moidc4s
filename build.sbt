@@ -36,8 +36,8 @@ inThisBuild(
 val crossScalacOptions = Def.task {
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((3, _))  => Seq("-source:3.0-migration", "-Wunused:all", "-explain")
-    case Some((2, 12)) => Seq("-Ywarn-unused", "-Ypartial-unification")
-    case Some((2, 13)) => Seq("-Wunused")
+    case Some((2, 12)) => Seq("-Ywarn-unused", "-Ypartial-unification", "-feature", "-language:higherKinds")
+    case Some((2, 13)) => Seq("-Wunused", "-feature")
     case _             => Seq.empty
   }
 }
