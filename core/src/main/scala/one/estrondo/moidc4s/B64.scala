@@ -16,6 +16,10 @@ private[moidc4s] object B64 {
     new BigInteger(decodeUrlEncoded(name, parameter))
   }
 
+  def decodeUrlEncodedAsBigUInteger(name: String, parameter: Option[String]): BigInteger = {
+    new BigInteger(1, decodeUrlEncoded(name, parameter))
+  }
+
   def decodeUrlEncoded(name: String, parameter: Option[String]): Array[Byte] = {
     parameter match {
       case Some(content) =>

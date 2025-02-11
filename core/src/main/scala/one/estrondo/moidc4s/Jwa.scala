@@ -45,23 +45,32 @@ private[moidc4s] object Jwa {
     val param = AlgorithmParameters.getInstance("EC")
     param.init(new ECGenParameterSpec(crv))
 
-    val x = B64.decodeUrlEncodedAsBigInteger("x", jwk.x)
-    val y = B64.decodeUrlEncodedAsBigInteger("y", jwk.y)
+    try {
 
-    val spec = new ECPublicKeySpec(
-      new ECPoint(x, y),
-      param.getParameterSpec(classOf[ECParameterSpec]),
-    )
+      val x = B64.decodeUrlEncodedAsBigInteger("x", jwk.x)
+      val y = B64.decodeUrlEncodedAsBigInteger("y", jwk.y)
 
-    KeyDescription.Public(keyFactory("EC").generatePublic(spec))
+      val spec = new ECPublicKeySpec(
+        new ECPoint(x, y),
+        param.getParameterSpec(classOf[ECParameterSpec]),
+      )
+
+      KeyDescription.Public(keyFactory("EC").generatePublic(spec))
+    } catch {
+      case cause: Exception => throw new OidcException.ECException(jwk, cause)
+    }
   }
 
   private def rsa(jwk: Jwk): KeyDescription.Key = {
-    val n = B64.decodeUrlEncodedAsBigInteger("n", jwk.n)
-    val e = B64.decodeUrlEncodedAsBigInteger("e", jwk.e)
+    val n = B64.decodeUrlEncodedAsBigUInteger("n", jwk.n)
+    val e = B64.decodeUrlEncodedAsBigUInteger("e", jwk.e)
 
-    val spec = new RSAPublicKeySpec(n, e)
-    KeyDescription.Public(keyFactory("RSA").generatePublic(spec))
+    try {
+      val spec = new RSAPublicKeySpec(n, e)
+      KeyDescription.Public(keyFactory("RSA").generatePublic(spec))
+    } catch {
+      case cause: Exception => throw new OidcException.RSAException(jwk, cause)
+    }
   }
 
   private def keyFactory(algorithm: String): KeyFactory = {
